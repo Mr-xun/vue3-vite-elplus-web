@@ -1,0 +1,69 @@
+// cover some element-ui styles
+.intelligent-net-body,
+.intelligent-net-app,
+.ep-dialog {
+    .ep-col {
+        height: 44px;
+    }
+
+    .ep-button + .ep-button {
+        margin-left: 5px;
+    }
+
+    .ep-button--small {
+        --ep-button-size: 28px;
+        padding: 5px 15px;
+    }
+
+    .ep-form {
+        --ep-form-label-font-size: 13px;
+
+        .ep-form-item__label {
+            height: 28px;
+            line-height: 28px;
+            font-weight: 500;
+        }
+
+        .ep-form-item--small {
+            --font-size: 13px;
+        }
+
+        .ep-form-item__error {
+            padding: 1px;
+        }
+    }
+
+    .ep-radio__label {
+        font-weight: 500;
+        font-size: 13px;
+        color: #515151;
+    }
+
+    .ep-checkbox__label {
+        font-weight: 500;
+        font-size: 13px;
+        color: #515151;
+    }
+
+    .ep-table {
+        font-size: 13px;
+    }
+
+    .ep-table--small .ep-table__cell {
+        padding: 8px 0;
+    }
+
+    .ep-table--small th,
+    td {
+        padding: 8px 0;
+    }
+
+    .ep-card {
+        --ep-card-padding: 10px;
+    }
+
+    .ep-popper {
+        max-width: 50%;
+        line-height: 180%;
+    }
+}

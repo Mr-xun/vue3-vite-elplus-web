@@ -1,0 +1,46 @@
+{
+  "name": "vue-vite-elp-web",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite serve --mode dev",
+    "test": "vite serve --mode test",
+    "uat": "vite serve --mode uat",
+    "prd": "vite serve --mode prd",
+    "build": "vite build",
+    "build:dev": "vite build --mode dev",
+    "build:test": "vite build --mode test",
+    "build:uat": "vite build --mode uat",
+    "build:prd": "vite build --mode prd",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.0.6",
+    "dayjs": "^1.11.4",
+    "element-plus": "^2.2.17",
+    "js-cookie": "^3.0.1",
+    "path-to-regexp": "^6.2.1",
+    "vite-plugin-qiankun": "^1.0.15",
+    "vue": "^3.2.37",
+    "vue-router": "^4.1.2",
+    "vuex": "^4.0.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-legacy": "^2.0.0",
+    "@vitejs/plugin-vue": "^3.0.1",
+    "autoprefixer": "^10.4.8",
+    "postcss": "^8.4.16",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-external-globals": "^0.6.1",
+    "sass": "^1.54.0",
+    "tailwindcss": "^3.1.8",
+    "unplugin-auto-import": "^0.10.1",
+    "unplugin-icons": "^0.14.7",
+    "unplugin-vue-components": "^0.21.1",
+    "unplugin-vue-define-options": "^0.6.2",
+    "vite": "^3.0.0",
+    "vite-plugin-compression": "^0.5.1",
+    "vite-plugin-optimize-persist": "^0.1.2",
+    "vite-plugin-package-config": "^0.1.1"
+  }
+}
