@@ -12,6 +12,11 @@ import Layout from "@/layout/index.vue";
 */
 export const routes = [
     {
+        path: '/login',
+        name: '登录页',
+        component: () => import("@/views/login/index.vue"),
+    },
+    {
         path: "/",
         name: "Tracker",
         redirect: "/tracker/index",

@@ -2,13 +2,14 @@
  * @Author: xunxiao 17810204418@163.com
  * @Date: 2022-09-17 21:10:34
  * @LastEditors: xunxiao 17810204418@163.com
- * @LastEditTime: 2022-09-17 22:13:38
+ * @LastEditTime: 2022-09-18 17:35:16
  * @Description: vite.config.js
  */
 import { defineConfig, loadEnv } from "vite";
 import vue from "@vitejs/plugin-vue";
 import AutoImport from "unplugin-auto-import/vite"; //自动导入
 import Components from "unplugin-vue-components/vite";
+import ElementPlus from 'unplugin-element-plus/vite'
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 import DefineOptions from "unplugin-vue-define-options/vite";
 import viteCompression from "vite-plugin-compression";
@@ -30,10 +31,17 @@ export default defineConfig(({ command, mode }) => {
         server: {
             open: true,
             host: "0.0.0.0",
+            proxy: {
+                '^/api': {
+                    target: 'http://127.0.0.1:3000',
+                    changeOrigin: true,
+                }
+            }
         },
         plugins: [
             vue(),
             DefineOptions(),
+            ElementPlus(),
             AutoImport({
                 imports: ["vue", "vue-router", "vuex"], // 自动导入vue、vue-router、vuex相关函数
                 resolvers: [
