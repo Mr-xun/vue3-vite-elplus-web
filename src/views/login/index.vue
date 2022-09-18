@@ -13,12 +13,12 @@
 		>
 			<div class="title-container">
 				<h3 class="title">
-					<img
+					<!-- <img
 						class="logo-img"
 						src="../../assets/trt/tiv-logo.png"
 						alt=""
 						srcset=""
-					/>
+					/> -->
 					<span>管理系统登录</span>
 				</h3>
 			</div>
@@ -31,7 +31,7 @@
 					name="user_name"
 					type="text"
 					autocomplete="off"
-					@keyup.enter.native="handleLogin"
+					@keyup.enter="handleLogin"
 				/>
 			</el-form-item>
 			<el-form-item prop="password">
@@ -44,7 +44,7 @@
 					name="password"
 					autocomplete="off"
 					:show-password="true"
-					@keyup.enter.native="handleLogin"
+					@keyup.enter="handleLogin"
 				/>
 			</el-form-item>
 			<!-- <el-form-item class="code-input">
@@ -57,7 +57,7 @@
 					type="text"
 					autocomplete="off"
 					style="width: 70%"
-					@keyup.enter.native="handleLogin"
+					@keyup.enter="handleLogin"
 				/>
 			</el-form-item> -->
 			<!-- <img
@@ -70,7 +70,7 @@
 				:loading="loading"
 				type="primary"
 				style="width: 100%; margin-bottom: 14px"
-				@click.native.prevent="handleLogin"
+				@click.prevent="handleLogin"
 			>
 				立即登录
 			</el-button>
@@ -89,18 +89,6 @@ export default {
 	data() {
 		return {
 			codeUrl: `${baseURL}auth/captcha`,
-			logo: [
-				{ img: "gitee.png", name: "gitee", radius: true },
-				{ img: "github.png", name: "github", radius: true },
-				{
-					img: "tencent_cloud.png",
-					name: "tencent_cloud",
-					radius: true,
-				},
-				{ img: "qq.png", name: "qq", radius: false },
-				{ img: "dingtalk.png", name: "dingtalk", radius: true },
-				{ img: "microsoft.png", name: "microsoft", radius: false },
-			],
 			loginForm: {
 				user_name: "",
 				password: "",
@@ -175,9 +163,6 @@ export default {
 					}
 				});
 		},
-		resolveLogo(logo) {
-			return require(`@/assets/logo/${logo}`);
-		},
 		handleLogin() {
 			this.$refs.loginForm.validate((valid) => {
 				if (valid) {
@@ -189,9 +174,6 @@ export default {
 							const data = r.data;
 							this.saveLoginData(data);
 							this.getUserDetailInfo();
-							this.saveEnumData();
-							this.$store.dispatch("basic/setOrgArchives");
-							this.$store.dispatch("basic/setDrugInfArchives");
 						})
 						.catch((error) => {
 							console.error(error);
@@ -202,58 +184,34 @@ export default {
 			});
 		},
 		saveLoginData(data) {
-			this.$store.commit("account/setAccessToken", data.access_token);
-			this.$store.commit(
-				"account/setRefreshToken",
-				data.refresh_token || ""
-			);
-			const current = new Date();
-			const expireTime = current.setTime(
-				current.getTime() + 1000 * data.expires_in
-			);
-			this.$store.commit("account/setExpireTime", expireTime);
-		},
-		saveEnumData() {
-			this.$api.basic_enum_condition().then((res) => {
-				let result = res.data.result;
-				let emunMap = {
-					1: this.setMedicareType,
-					2: this.setReimbursementType,
-					3: this.setPrescriptionType,
-					4: this.setCrafts,
-					5: this.setUnits,
-					6: this.setUrgent,
-					7: this.setClassifies,
-					8: this.setOrgType,
-					9: this.setDrugNotes,
-					10: this.setIncompatibility,
-					11: this.setRefuseSendReason,
-				};
-				result.map((item) => {
-					emunMap[item.enumType](item.baseEnumBoList);
-				});
-			});
+			this.$store.commit("account/setAccessToken", data.token);
 		},
 		getUserDetailInfo() {
-			this.$get("auth/user")
-				.then((r) => {
-					this.$store.commit("account/setUser", r.data.principal);
-					this.getUserOrgInfo(r.data.principal.orgId);
-					ElMessage({
-						message: "登录成功",
-						type: "success",
-					});
-					this.loading = false;
-					this.$router.push("/");
-				})
-				.catch((error) => {
-					ElMessage({
-						message: "登录失败",
-						type: "error",
-					});
-					console.error(error);
-					this.loading = false;
-				});
+			ElMessage({
+				message: "登录成功",
+				type: "success",
+			});
+			this.loading = false;
+			this.$router.push("/");
+			// this.$get("auth/user")
+			// 	.then((r) => {
+			// 		this.$store.commit("account/setUser", r.data.principal);
+			// 		this.getUserOrgInfo(r.data.principal.orgId);
+			// 		ElMessage({
+			// 			message: "登录成功",
+			// 			type: "success",
+			// 		});
+			// 		this.loading = false;
+			// 		this.$router.push("/");
+			// 	})
+			// 	.catch((error) => {
+			// 		ElMessage({
+			// 			message: "登录失败",
+			// 			type: "error",
+			// 		});
+			// 		console.error(error);
+			// 		this.loading = false;
+			// 	});
 		},
 		//获取所属机构信息
 		getUserOrgInfo(orgId) {
