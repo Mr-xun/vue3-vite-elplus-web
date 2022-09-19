@@ -13,7 +13,7 @@ export default {
      * 用户登录
      */
     login(params) {
-        return request.post("/api/system/user/login", params);
+        return request.post("/system/user/login", params);
     },
     /**
      * 埋点报表

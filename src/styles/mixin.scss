@@ -1,0 +1,111 @@
+@mixin display_flex {
+	display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
+
+@mixin flex_wrap {
+	flex-wrap: wrap;
+	-webkit-flex-wrap: wrap;
+}
+
+@mixin flex_direction {
+  flex-direction: column;
+}
+
+@mixin justify_content_between {
+	-webkit-justify-content: space-between;
+    justify-content: space-between;
+}
+
+@mixin justify_content_end {
+	justify-content: flex-end;
+	-webkit-justify-content: flex-end;
+}
+@mixin justify_content_center {
+  -webkit-justify-content: center;
+  justify-content: center;
+}
+@mixin justify_content_around {
+  -webkit-justify-content: space-around;
+  justify-content: space-around;
+}
+
+@mixin align_items_center {
+	align-items: center;
+	-webkit-align-items: center;
+}
+
+@mixin flex1 {
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+}
+@mixin clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+@mixin scrollBar {
+  &::-webkit-scrollbar-track-piece {
+    background: #d3dce6;
+  }
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #99a9bf;
+    border-radius: 20px;
+  }
+}
+
+@mixin relative {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+@mixin pct($pct) {
+  width: #{$pct};
+  position: relative;
+  margin: 0 auto;
+}
+
+@mixin triangle($width, $height, $color, $direction) {
+  $width: $width/2;
+  $color-border-style: $height solid $color;
+  $transparent-border-style: $width solid transparent;
+  height: 0;
+  width: 0;
+
+  @if $direction==up {
+    border-bottom: $color-border-style;
+    border-left: $transparent-border-style;
+    border-right: $transparent-border-style;
+  }
+
+  @else if $direction==right {
+    border-left: $color-border-style;
+    border-top: $transparent-border-style;
+    border-bottom: $transparent-border-style;
+  }
+
+  @else if $direction==down {
+    border-top: $color-border-style;
+    border-left: $transparent-border-style;
+    border-right: $transparent-border-style;
+  }
+
+  @else if $direction==left {
+    border-right: $color-border-style;
+    border-top: $transparent-border-style;
+    border-bottom: $transparent-border-style;
+  }
+}

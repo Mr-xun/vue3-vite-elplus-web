@@ -1,8 +1,8 @@
 /*
  * @Author: xunxiao 17810204418@163.com
  * @Date: 2022-09-17 21:10:34
- * @LastEditors: xunxiao 17810204418@163.com
- * @LastEditTime: 2022-09-18 17:35:16
+ * @LastEditors: xunxiao
+ * @LastEditTime: 2022-09-19 14:36:58
  * @Description: vite.config.js
  */
 import { defineConfig, loadEnv } from "vite";
@@ -23,11 +23,8 @@ let globals = externalGlobals({
 });
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
-    const { VUE_APP_BASE_PATH } = loadEnv(mode, process.cwd(), "");
     const env = command == "serve" ? "development" : "production";
-    let base = VUE_APP_BASE_PATH;
     return {
-        base,
         server: {
             open: true,
             host: "0.0.0.0",

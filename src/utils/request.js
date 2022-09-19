@@ -1,9 +1,9 @@
 /*
  * @Author: xunxiao 17810204418@163.com
  * @Date: 2022-09-17 21:10:34
- * @LastEditors: xunxiao 17810204418@163.com
- * @LastEditTime: 2022-09-18 20:13:40
- * @Description:
+ * @LastEditors: xunxiao
+ * @LastEditTime: 2022-09-19 14:38:42
+ * @Description: request
  */
 import { ElNotification } from "element-plus";
 import db from "@/utils/localstorage";
@@ -11,7 +11,7 @@ import router from "@/router";
 
 const service = axios.create({
     withCredentials: true,
-    baseURL: "http://127.0.0.1:3000",
+    baseURL: process.env.VUE_APP_BASE_API,
     timeout: 3 * 1000,
     headers: {
         "Content-Type": "application/json; charset=UTF-8",
