@@ -2,7 +2,7 @@
  * @Author: xunxiao
  * @Date: 2022-09-19 08:24:40
  * @LastEditors: xunxiao
- * @LastEditTime: 2022-09-19 18:02:40
+ * @LastEditTime: 2022-09-21 15:26:40
  * @Description: Layout Component
 -->
 <template>
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { Navbar, Sidebar, AppMain } from "./components/index.js";
+import { Navbar, Sidebar, AppMain, TagsView } from "./components/index.js";
 import ResizeMixin from "./mixin/ResizeHandler";
 export default {
     name: "Layout",
@@ -28,6 +28,7 @@ export default {
         Navbar,
         Sidebar,
         AppMain,
+        TagsView
     },
     mixins: [ResizeMixin],
     computed: {

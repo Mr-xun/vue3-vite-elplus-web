@@ -2,7 +2,7 @@
  * @Author: xunxiao
  * @Date: 2022-09-19 08:24:39
  * @LastEditors: xunxiao
- * @LastEditTime: 2022-09-19 17:18:10
+ * @LastEditTime: 2022-09-21 15:38:44
  * @Description: Navbar Component
 -->
 <template>
@@ -53,7 +53,6 @@ const logout = () => {
 <style lang="scss" scoped>
 .navbar {
     height: 50px;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
     overflow: hidden;
     position: relative;
     background: #fff;

@@ -2,7 +2,7 @@
  * @Author: xunxiao
  * @Date: 2022-09-19 08:24:40
  * @LastEditors: xunxiao
- * @LastEditTime: 2022-09-19 18:02:50
+ * @LastEditTime: 2022-09-21 15:29:38
  * @Description: settings
  */
 import defaultSettings from "@/utils/settings";
@@ -21,7 +21,7 @@ const state = {
     },
     device: "desktop",
     sidebarLogo: db.get("SIDEBAR_LOGO", true),
-    multipage: db.get("MULTIPAGE", false),
+    multipage: db.get("MULTIPAGE", true),
     fixSiderbar: db.get("FIX_SIDERBAR", true),
     fixHeader: db.get("FIX_HEADER", true),
     colorList: ["rgb(245, 34, 45)", "rgb(250, 84, 28)", "rgb(250, 173, 20)", "rgb(66, 185, 131)", "rgb(82, 196, 26)", "rgb(24, 144, 255)", "rgb(47, 84, 235)", "rgb(114, 46, 209)"],
