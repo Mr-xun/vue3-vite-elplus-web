@@ -2,7 +2,7 @@
  * @Author: xunxiao 17810204418@163.com
  * @Date: 2022-09-18 17:06:54
  * @LastEditors: xunxiao 17810204418@163.com
- * @LastEditTime: 2022-09-25 16:30:00
+ * @LastEditTime: 2022-09-25 21:09:52
  * @Description: 系统接口
  */
 
@@ -45,6 +45,18 @@ export default {
     },
     system_menu_create(params) {
         //新增菜单
-        return request.jsonPost("/system/menu/create", params);
+        return request.post("/system/menu/create", params);
+    },
+    system_menu_update(params) {
+        //更新菜单
+        return request.put("/system/menu/update", params);
+    },
+    system_menu_delete(deleteIds) {
+        //删除菜单
+        return request.deleted(`/basic/baseEnum/${deleteIds}`);
+    },
+    system_menu_list(params) {
+        //查询菜单列表
+        return request.get("/system/menu/list", params);
     },
 };

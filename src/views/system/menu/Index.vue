@@ -5,7 +5,7 @@
 				<div class="app-container">
 					<div class="filter-container">
 						<el-input
-							v-model="menuName"
+							v-model="menu_name"
 							placeholder="名称"
 							class="filter-item search-item"
 						/>
@@ -44,7 +44,7 @@
 					<template #header>
 						<div class="clearfix">
 							<span>{{
-								menu.menuId === "" ? "新增" : "修改"
+								menu.id === "" ? "新增" : "修改"
 							}}</span>
 						</div>
 					</template>
@@ -56,9 +56,9 @@
 							label-position="right"
 							label-width="100px"
 						>
-							<el-form-item label="上级菜单" prop="parentId">
+							<el-form-item label="上级菜单" prop="parent_id">
 								<!-- <treeselect
-									v-model="menu.parentId"
+									v-model="menu.parent_id"
 									:multiple="false"
 									:options="menuTree"
 									clear-value-text="清除"
@@ -66,8 +66,8 @@
 									style="width: 100%"
 								/> -->
 							</el-form-item>
-							<el-form-item label="名称" prop="menuName">
-								<el-input v-model="menu.menuName" />
+							<el-form-item label="名称" prop="menu_name">
+								<el-input v-model="menu.menu_name" />
 							</el-form-item>
 							<el-form-item label="类型" prop="type">
 								<el-radio-group v-model="menu.type">
@@ -113,10 +113,10 @@
 							<el-form-item
 								v-show="menu.type === '0'"
 								label="排序"
-								prop="orderNum"
+								prop="order_num"
 							>
 								<el-input-number
-									v-model="menu.orderNum"
+									v-model="menu.order_num"
 									:min="0"
 									:max="100"
 									@change="handleNumChange"
@@ -134,7 +134,7 @@
 								:loading="buttonLoading"
 								@click="submit"
 								>{{
-									menu.menuId === "" ? "新增" : "修改"
+									menu.id === "" ? "新增" : "修改"
 								}}</el-button
 							>
 						</el-col>
@@ -153,7 +153,7 @@
 import Icons from "./Icons.vue";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
-
+import api from "@/api/system";
 export default {
 	name: "MenuManage",
 	components: { Icons, Treeselect },
@@ -163,10 +163,10 @@ export default {
 			buttonLoading: false,
 			selection: [],
 			menuTree: [],
-			menuName: "",
+			menu_name: "",
 			menu: this.initMenu(),
 			rules: {
-				menuName: [
+				menu_name: [
 					{ required: true, message: "不能为空", trigger: "blur" },
 					{
 						min: 2,
@@ -194,24 +194,24 @@ export default {
 		};
 	},
 	mounted() {
-		// this.initMenuTree();
+		this.initMenuTree();
 	},
 	methods: {
 		initMenuTree() {
-			this.$get("system/menu").then((r) => {
-				this.menuTree = r.data.data.rows;
-			});
+			api.system_menu_list().then(res=>{
+				this.menuTree = res.data.rows;
+			})
 		},
 		initMenu() {
 			return {
-				menuId: "",
-				menuName: "",
-				parentId: null,
+				id: "",
+				menu_name: "",
+				parent_id: null,
 				path: "",
 				component: "",
 				perms: "",
 				type: "0",
-				orderNum: 0,
+				order_num: 0,
 				icon: "",
 			};
 		},
@@ -219,7 +219,7 @@ export default {
 			this.$download(
 				"system/menu/excel",
 				{
-					menuName: this.menuName,
+					menu_name: this.menu_name,
 				},
 				`menu_${new Date().getTime()}.xlsx`
 			);
@@ -229,22 +229,22 @@ export default {
 			return data.label.indexOf(value) !== -1;
 		},
 		nodeClick(data, node, v) {
-			this.menu.parentId = data.parentId;
-			if (this.menu.parentId === "0") {
-				this.menu.parentId = null;
+			this.menu.parent_id = data.parent_id;
+			if (this.menu.parent_id === "0") {
+				this.menu.parent_id = null;
 			}
-			this.menu.orderNum = data.orderNum;
+			this.menu.order_num = data.order_num;
 			this.menu.type = data.type;
 			this.menu.perms = data.perms;
 			this.menu.path = data.path;
 			this.menu.component = data.component;
 			this.menu.icon = data.icon;
-			this.menu.menuName = data.label;
-			this.menu.menuId = data.id;
+			this.menu.menu_name = data.label;
+			this.menu.id = data.id;
 			this.$refs.form.clearValidate();
 		},
 		handleNumChange(val) {
-			this.menu.orderNum = val;
+			this.menu.order_num = val;
 		},
 		chooseIcons() {
 			this.iconVisible = true;
@@ -258,19 +258,19 @@ export default {
 				if (valid) {
 					this.buttonLoading = true;
 					this.menu.createTime = this.menu.modifyTime = null;
-					if (this.menu.menuId) {
+					if (this.menu.id) {
 						this.$put("system/menu", { ...this.menu }).then(() => {
 							this.buttonLoading = false;
-							this.$message({
+							ElMessage({
 								message: "修改成功",
 								type: "success",
 							});
 							this.reset();
 						});
 					} else {
-						this.$post("system/menu", { ...this.menu }).then(() => {
+						api.system_menu_create({ ...this.menu }).then(() => {
 							this.buttonLoading = false;
-							this.$message({
+							ElMessage({
 								message: "新增成功",
 								type: "success",
 							});
@@ -284,15 +284,15 @@ export default {
 		},
 		reset() {
 			this.initMenuTree();
-			this.menuName = "";
+			this.menu_name = "";
 			this.resetForm();
 		},
 		search() {
-			this.$refs.menuTree.filter(this.menuName);
+			this.$refs.menuTree.filter(this.menu_name);
 		},
 		add() {
 			this.resetForm();
-			this.$message({
+			ElMessage({
 				message: "请在表单中填写相关信息",
 				type: "info",
 			});
@@ -300,7 +300,7 @@ export default {
 		deleteMenu() {
 			const checked = this.$refs.menuTree.getCheckedKeys();
 			if (checked.length === 0) {
-				this.$message({
+				ElMessage({
 					message: "请先选择节点",
 					type: "warning",
 				});
@@ -315,10 +315,10 @@ export default {
 					}
 				)
 					.then(() => {
-						this.menu.menuIds = checked.join(",");
-						this.$delete(`system/menu/${this.menu.menuIds}`).then(
+						this.menu.ids = checked.join(",");
+						this.$delete(`system/menu/${this.menu.ids}`).then(
 							() => {
-								this.$message({
+								ElMessage({
 									message: "删除成功",
 									type: "success",
 								});
