@@ -1,6 +1,6 @@
 :root {
-    --ep-color-primary: #1890ff;
-    --ep-text-color-secondary: #515151;
-    --ep-form-label-font-size: 13px;
-    --ep-component-size-small: 28px;
+    --el-color-primary: #1890ff;
+    --el-text-color-secondary: #515151;
+    --el-form-label-font-size: 13px;
+    --el-component-size-small: 28px;
 }

@@ -2,19 +2,13 @@
  * @Author: xunxiao 17810204418@163.com
  * @Date: 2022-09-18 17:06:54
  * @LastEditors: xunxiao 17810204418@163.com
- * @LastEditTime: 2022-09-18 17:08:38
+ * @LastEditTime: 2022-09-25 16:30:00
  * @Description: 系统接口
  */
 
 import request from "@/utils/request";
 import getUrl from "@/utils/get-url";
 export default {
-    /**
-     * 用户登录
-     */
-    login(params) {
-        return request.post("/system/user/login", params);
-    },
     /**
      * 埋点报表
      */
@@ -40,5 +34,17 @@ export default {
         return request.post(getUrl(`/signTrack/exportTrackCountReport`), params, {
             responseType: "blob",
         });
+    },
+    login(params) {
+        //用户登录
+        return request.post("/system/user/login", params);
+    },
+    system_user_all(params = {}) {
+        //查询所有用户
+        return request.post("/system/user/getAllUsers", params);
+    },
+    system_menu_create(params) {
+        //新增菜单
+        return request.jsonPost("/system/menu/create", params);
     },
 };

@@ -1,8 +1,8 @@
 /*
  * @Author: xunxiao 17810204418@163.com
  * @Date: 2022-09-17 21:10:34
- * @LastEditors: xunxiao
- * @LastEditTime: 2022-09-19 14:36:58
+ * @LastEditors: xunxiao 17810204418@163.com
+ * @LastEditTime: 2022-09-25 20:44:18
  * @Description: vite.config.js
  */
 import { defineConfig, loadEnv } from "vite";
@@ -67,7 +67,7 @@ export default defineConfig(({ command, mode }) => {
         css: {
             preprocessorOptions: {
                 scss: {
-                    additionalData: `$env:${env};@use "@/styles/el-namespace.scss" as *;`, //scss设置环境变量、自定义elementui class前缀
+                    additionalData: `$env:${env};`, //scss设置环境变量、自定义elementui class前缀
                 },
             },
         },

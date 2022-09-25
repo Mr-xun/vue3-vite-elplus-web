@@ -1,13 +1,14 @@
 /*
  * @Author: xunxiao 17810204418@163.com
  * @Date: 2022-09-17 21:10:34
- * @LastEditors: xunxiao
- * @LastEditTime: 2022-09-19 14:38:42
+ * @LastEditors: xunxiao 17810204418@163.com
+ * @LastEditTime: 2022-09-25 15:51:58
  * @Description: request
  */
 import { ElNotification } from "element-plus";
 import db from "@/utils/localstorage";
 import router from "@/router";
+import { getToken, getRefreshToken, getExpireTime } from '@/utils/auth';
 
 const service = axios.create({
     withCredentials: true,
@@ -74,8 +75,7 @@ service.interceptors.request.use((config) => {
     if (!config?.headers) {
         throw new Error(`Expected 'config' and 'config.headers' not to be undefined`);
     }
-    let token = db.get("ACCESS_TOKEN", "");
-    config.headers["Authorization"] = `Bearer ${token}`;
+    config.headers["Authorization"] = `Bearer ${getToken()}`;
     return config;
 }, ErrorHandle);
 

@@ -1,64 +1,64 @@
 // cover some element-ui styles
 .intelligent-net-body,
 .intelligent-net-app,
-.ep-dialog {
-    .ep-col {
+.el-dialog {
+    .el-col {
         height: 44px;
     }
 
-    .ep-button + .ep-button {
+    .el-button + .el-button {
         margin-left: 5px;
     }
 
-    .ep-button--small {
-        --ep-button-size: 28px;
+    .el-button--small {
+        --el-button-size: 28px;
         padding: 5px 15px;
     }
 
-    .ep-form {
-        --ep-form-label-font-size: 13px;
+    .el-form {
+        --el-form-label-font-size: 13px;
 
-        .ep-form-item__label {
+        .el-form-item__label {
             height: 28px;
             line-height: 28px;
             font-weight: 500;
         }
 
-        .ep-form-item--small {
+        .el-form-item--small {
             --font-size: 13px;
         }
     }
 
-    .ep-radio__label {
+    .el-radio__label {
         font-weight: 500;
         font-size: 13px;
         color: #515151;
     }
 
-    .ep-checkbox__label {
+    .el-checkbox__label {
         font-weight: 500;
         font-size: 13px;
         color: #515151;
     }
 
-    .ep-table {
+    .el-table {
         font-size: 13px;
     }
 
-    .ep-table--small .ep-table__cell {
+    .el-table--small .el-table__cell {
         padding: 8px 0;
     }
 
-    .ep-table--small th,
+    .el-table--small th,
     td {
         padding: 8px 0;
     }
 
-    .ep-card {
-        --ep-card-padding: 10px;
+    .el-card {
+        --el-card-padding: 10px;
     }
 
-    .ep-popper {
+    .el-popper {
         max-width: 50%;
         line-height: 180%;
     }

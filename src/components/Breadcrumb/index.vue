@@ -65,7 +65,7 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-.app-breadcrumb.ep-breadcrumb {
+.app-breadcrumb.el-breadcrumb {
     display: inline-block;
     font-size: 14px;
     line-height: 50px;

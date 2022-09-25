@@ -67,18 +67,18 @@ const isVisible = computed({
 <style lang="scss">
 .business-dialog {
     background: #f5f5f5 !important;
-    .ep-dialog__body {
+    .el-dialog__body {
         padding: 0 15px 10px !important;
     }
-    .ep-dialog__header {
+    .el-dialog__header {
         padding: 5px 15px 0px !important;
         margin-right: 0 !important;
     }
-    .ep-dialog__footer {
+    .el-dialog__footer {
         padding-top: 0 !important;
         padding-bottom: 10px !important;
     }
-    .ep-divider {
+    .el-divider {
         margin: 5px 0 !important;
     }
 }

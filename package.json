@@ -16,9 +16,11 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.6",
+    "@riophae/vue-treeselect": "^0.4.0",
     "dayjs": "^1.11.4",
     "element-plus": "^2.2.17",
     "js-cookie": "^3.0.1",
+    "nprogress": "^0.2.0",
     "path-to-regexp": "^6.2.1",
     "vue": "^3.2.37",
     "vue-router": "^4.1.2",

@@ -80,13 +80,13 @@ export default {
     position: relative;
     overflow: hidden;
     width: 100%;
-    :deep(.ep-scrollbar__bar) {
+    :deep(.el-scrollbar__bar) {
         bottom: 0px;
     }
-    :deep(.ep-scrollbar__wrap) {
+    :deep(.el-scrollbar__wrap) {
         height: 49px;
     }
-    :deep(.ep-scrollbar__view){
+    :deep(.el-scrollbar__view){
         display: flex;
     }
 }

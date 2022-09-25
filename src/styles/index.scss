@@ -1,18 +1,14 @@
-@use 'var.css';
-@use 'element-ui.scss';
-@use 'app.scss';
+@use "var.css";
+@use "element-ui.scss";
+@use "app.scss";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @import "variables.module.scss";
-@import 'transition.scss';
-@import 'sidebar.scss';
-
-label {
-    font-weight: 700;
-}
+@import "transition.scss";
+@import "sidebar.scss";
 
 * {
     margin: 0;
@@ -24,7 +20,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
-    font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+    font-family: Chinese Quote, -apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Helvetica, Arial, sans-serif;
 }
 
 html {
@@ -58,13 +54,145 @@ a:hover {
 div:focus {
     outline: none;
 }
-
+//main-container全局样式
+.app-container {
+    padding: 0 0 20px;
+    margin: 10px;
+    // background: #fff;
+}
 .filter-container {
-    padding-bottom: 10px;
+    padding: 20px 20px 10px;
+    margin-bottom: 5px;
+    background: #fff;
+    border-radius: 5px;
 
     .filter-item {
         display: inline-block;
         vertical-align: middle;
         margin-bottom: 10px;
     }
+
+    .search-item {
+        margin-right: 10px;
+        width: 170px;
+    }
+
+    .date-range-item {
+        width: 240px;
+    }
+
+    .el-form-item {
+        margin-bottom: 0 !important;
+    }
+}
+
+.center-container {
+    padding: 20px;
+    background: #fff;
+    border-radius: 5px;
+}
+.pagination-container {
+    margin-top: 30px;
+}
+.table-operation {
+    margin-right: 10px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+//refine vue-multiselect plugin
+.multiselect {
+    line-height: 16px;
+}
+
+.multiselect--active {
+    z-index: 1000 !important;
+}
+.ep-button:not(.is-circle, .is-round),
+.ep-input__inner {
+    border-radius: 3px !important;
+}
+
+.ep-input {
+    font-size: 0.85rem !important;
+}
+
+.ep-button {
+    margin-left: 0 !important;
+    margin-right: 10px !important;
+}
+
+.ep-sub-menu__title,
+.ep-menu-item {
+    font-weight: 400;
+    font-size: 14px;
+
+    i {
+        color: rgba(255, 255, 255, 0.7) !important;
+        margin-right: 10px !important;
+        margin-left: 10px;
+    }
+}
+
+.ep-tooltip__popper {
+    max-width: 500px !important;
+    font-size: 0.88rem;
+}
+
+.no-perm {
+    margin-top: -6px;
+}
+
+.ep-input__inner {
+    height: 38px;
+    line-height: 38px;
+}
+
+.ep-menu-item.is-active {
+    background-color: #1f2328 !important;
+}
+.ep-table {
+    th,
+    td {
+        padding: 6px 0 !important;
+    }
+}
+
+.ep-table thead {
+    color: #606266;
+}
+.menu-wrapper.nest-menu .ep-sub-menu__title {
+    padding-left: 63px !important;
+}
+
+.vue-treeselect__placeholder,
+.vue-treeselect__single-value {
+    line-height: 40px !important;
+    height: 40px !important;
+    padding-left: 10px !important;
+}
+
+.vue-treeselect__single-value {
+    color: #606266 !important;
+}
+/*超出省略*/
+.fellip {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-break: break-all;
+    overflow: hidden;
+}
+
+.fellip2 {
+    line-height: 1.5em;
+    height: 3em;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -moz-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    -moz-box-orient: vertical;
+    word-wrap: normal;
+    word-break: break-all;
 }

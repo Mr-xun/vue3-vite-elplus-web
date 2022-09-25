@@ -6,7 +6,7 @@
  * @Description: app-vue
 -->
 <template>
-    <el-config-provider :locale="locale" namespace="ep">
+    <el-config-provider :locale="locale" namespace="el">
         <router-view />
     </el-config-provider>
 </template>

@@ -44,4 +44,23 @@ export const routes = [
             },
         ],
     },
+    {
+        name: "System",
+        redirect: "/system/menu",
+        component: Layout,
+        meta: {
+            icon: "Files",
+            title: "系统管理",
+        },
+        children: [
+            {
+                path: "/system/menu",
+                name: "SystemMenuIndex",
+                component: () => import("@/views/system/menu/index.vue"),
+                meta: {
+                    title: "菜单管理",
+                },
+            },
+        ],
+    },
 ];

@@ -1,8 +1,8 @@
 <!--
  * @Author: xunxiao
  * @Date: 2022-09-19 08:24:39
- * @LastEditors: xunxiao
- * @LastEditTime: 2022-09-21 15:38:44
+ * @LastEditors: xunxiao 17810204418@163.com
+ * @LastEditTime: 2022-09-25 20:09:59
  * @Description: Navbar Component
 -->
 <template>
@@ -104,7 +104,6 @@ const logout = () => {
                     vertical-align: top;
                     font-size: 0.9rem;
                     margin-left: 5px;
-                    margin-top: -4px;
                     display: inline-block;
                 }
                 .user-avatar {

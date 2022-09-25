@@ -1,53 +1,32 @@
-$menuBg: #304156;
-$subMenuBg: #1f2d3d;
-$menuHover: #001528;
-$headerBg: #23262e;
-//颜色
-$white: #fff !default;
-$green: #5ebc75 !default;
-$red: #e96572 !default;
-$yellow: #f2c44d !default;
-$orange: #ffa0a2 !default;
-$gray: #b1b1b1 !default;
-$black: #000 !default;
-// 宽度列表
-$width-list: 40 50 60 70 80 86 100 110 120 140 150 155 160 180 192 200 220 260 280 315 325 350 400 440 445 450 550 700 1340;
-// 内外边距列表
-$distance-list: 0 1 2 5 6 8 9 10 12 15 20 25 30 35 40 45 50 60 80 86 90 100;
-$distance-class-list: m,
-mv,
-mh,
-mt,
-ml,
-mr,
-mb,
-p,
-pv,
-ph,
-pt,
-pl,
-pr,
-pb,
-top,
-left,
-right,
-bottom;
-//圆角弧度
-$radius: 1 2 3 4 5 6 7 8 9 10 12 15 18 20 50 100;
-//透明度
-$opacity: 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9;
-//sidebar
-$menuText:#bfcbd9;
-$menuActiveText:#409EFF;
-$subMenuActiveText:#f4f4f5; //https://github.com/ElemeFE/element/issues/12951
-$menuBg:#304156;
-$menuHover:#263445;
-$subMenuBg:#1f2d3d;
-$subMenuHover:#001528;
-$sideBarWidth:210px; //侧边栏默认宽度
+// base color
+$blue:#324157;
+$light-blue:#3A71A8;
+$red:#C03639;
+$pink: #E65D6E;
+$green: #30B08F;
+$tiffany: #4AB7BD;
+$yellow:#FEC171;
+$panGreen: #30B08F;
+
+// sidebar
+$menuText:rgba(255, 255, 255, .7);
+$menuTextHover: #fff;
+$menuActiveText:#fff;
+$subMenuActiveText:#fff; // https://github.com/ElemeFE/element/issues/12951
+
+$menuBg:#272c33;
+$menuHover:rgba(0,0,0,.1);
+
+$subMenuBg:#272c33;
+$subMenuHover:rgba(0,0,0,.1);
+
+$sideBarWidth: 255px;
 @if $env != 'development' {
     $sideBarWidth: 0px ; //侧边栏默认宽度集成到中台环境时使用；
 }
+
+// the :export directive is the magic sauce for webpack
+// https://www.bluematador.com/blog/how-to-share-variables-between-js-and-sass
 :export {
     menuText: $menuText;
     menuActiveText: $menuActiveText;
@@ -57,4 +36,6 @@ $sideBarWidth:210px; //侧边栏默认宽度
     subMenuBg: $subMenuBg;
     subMenuHover: $subMenuHover;
     sideBarWidth: $sideBarWidth;
-}
+    menuTextHover: $menuTextHover;
+  }
+  
