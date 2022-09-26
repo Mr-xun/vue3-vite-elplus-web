@@ -1,3 +1,10 @@
+<!--
+ * @Author: xunxiao
+ * @Date: 2022-09-19 08:24:40
+ * @LastEditors: xunxiao
+ * @LastEditTime: 2022-09-26 15:12:58
+ * @Description: Sidebar Component
+-->
 <template>
     <el-scrollbar wrap-class="scrollbar-wrapper">
         <el-menu
@@ -30,7 +37,7 @@ const activeMenu = computed(() => {
     return route.path;
 });
 const sidebarCollapse = computed(() => {
-    return !store.state.app.sidebar.opened;
+    return !store.state.setting.sidebar.opened;
 });
 
 const variables = reactive(sassVariables);

@@ -14,13 +14,13 @@ $menuTextHover: #fff;
 $menuActiveText:#fff;
 $subMenuActiveText:#fff; // https://github.com/ElemeFE/element/issues/12951
 
-$menuBg:#272c33;
+$menuBg:#304156;
 $menuHover:rgba(0,0,0,.1);
 
 $subMenuBg:#272c33;
 $subMenuHover:rgba(0,0,0,.1);
 
-$sideBarWidth: 255px;
+$sideBarWidth: 210px;
 @if $env != 'development' {
     $sideBarWidth: 0px ; //侧边栏默认宽度集成到中台环境时使用；
 }

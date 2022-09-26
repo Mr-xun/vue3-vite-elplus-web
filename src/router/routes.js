@@ -1,3 +1,10 @@
+/*
+ * @Author: xunxiao
+ * @Date: 2022-09-26 15:00:09
+ * @LastEditors: xunxiao
+ * @LastEditTime: 2022-09-26 17:46:58
+ * @Description: Routes
+ */
 import Layout from "@/layout/index.vue";
 /*
   meta: {
@@ -59,6 +66,13 @@ export const routes = [
                 component: () => import("@/views/system/menu/index.vue"),
                 meta: {
                     title: "菜单管理",
+                },
+            },{
+                path: "/system/menu1",
+                name: "SystemMenuIndex1",
+                component: () => import("@/views/system/menu/index.vue"),
+                meta: {
+                    title: "菜单管理1",
                 },
             },
         ],
