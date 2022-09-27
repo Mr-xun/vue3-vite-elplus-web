@@ -69,8 +69,8 @@
                             </el-form-item>
                             <el-form-item label="类型" prop="type">
                                 <el-radio-group v-model="menu.type">
-                                    <el-radio :label="0">菜单</el-radio>
-                                    <el-radio :label="1">按钮</el-radio>
+                                    <el-radio :label="1">菜单</el-radio>
+                                    <el-radio :label="2">按钮</el-radio>
                                 </el-radio-group>
                             </el-form-item>
                             <el-form-item v-show="menu.type == 0" label="图标" prop="icon">
@@ -93,7 +93,7 @@
                             <el-form-item label="权限" prop="perms">
                                 <el-input v-model="menu.perms" clearable />
                             </el-form-item>
-                            <el-form-item v-show="menu.type == 0" label="排序" prop="order_num">
+                            <el-form-item v-show="menu.type == 1" label="排序" prop="order_num">
                                 <el-input-number v-model="menu.order_num" :min="0" :max="100" @change="handleNumChange" />
                             </el-form-item>
                         </el-form>
@@ -114,7 +114,7 @@
 
 <script>
 import Icons from "./Icons.vue";
-import api from "@/api/system";
+import api from "@/api";
 export default {
     name: "MenuManage",
     components: {
@@ -177,7 +177,7 @@ export default {
                 path: "",
                 component: "",
                 perms: "",
-                type: 0,
+                type: 1, //1 菜单 2 按钮
                 order_num: 0,
                 icon: "",
             };
@@ -214,7 +214,7 @@ export default {
             this.menu.order_num = val;
         },
         chooseIcons() {
-            console.log(111)
+            console.log(111);
             this.iconVisible = true;
         },
         chooseIcon(icon) {

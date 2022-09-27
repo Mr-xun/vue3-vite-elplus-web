@@ -2,7 +2,7 @@
  * @Author: xunxiao
  * @Date: 2022-09-26 15:00:09
  * @LastEditors: xunxiao
- * @LastEditTime: 2022-09-26 17:46:58
+ * @LastEditTime: 2022-09-27 14:15:41
  * @Description: Routes
  */
 import Layout from "@/layout/index.vue";
@@ -68,11 +68,11 @@ export const routes = [
                     title: "菜单管理",
                 },
             },{
-                path: "/system/menu1",
-                name: "SystemMenuIndex1",
-                component: () => import("@/views/system/menu/index.vue"),
+                path: "/system/role",
+                name: "SystemRoleIndex",
+                component: () => import("@/views/system/role/index.vue"),
                 meta: {
-                    title: "菜单管理1",
+                    title: "角色管理",
                 },
             },
         ],
