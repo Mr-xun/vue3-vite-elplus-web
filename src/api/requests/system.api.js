@@ -1,8 +1,8 @@
 /*
  * @Author: xunxiao 17810204418@163.com
  * @Date: 2022-09-18 17:06:54
- * @LastEditors: xunxiao
- * @LastEditTime: 2022-09-27 14:48:56
+ * @LastEditors: xunxiao 17810204418@163.com
+ * @LastEditTime: 2022-09-27 21:22:09
  * @Description: 系统接口
  */
 
@@ -72,7 +72,6 @@ export default {
         return request.delete(`/system/role/delete/${deleteIds}`);
     },
     system_role_list(params) {
-        console.log(params,"params")
         //查询角色（分页）
         return request.get("/system/role/list", {params});
     },

@@ -319,14 +319,14 @@ export default {
         chooseIcon(icon) {
             this.activeIndex = icon;
             this.choosedIcon = icon;
-            this.$message({
+            ElMessage({
                 message: "已选择：" + icon,
                 type: "success",
             });
         },
         confirm() {
             if (!this.choosedIcon) {
-                this.$message({
+                ElMessage({
                     message: "尚未选择任何图标",
                     type: "warning",
                 });

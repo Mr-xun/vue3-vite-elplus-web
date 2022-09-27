@@ -9,8 +9,8 @@
                     <span>管理系统登录</span>
                 </h3>
             </div>
-            <el-form-item prop="user_name">
-                <el-input ref="user_name" v-model="loginForm.user_name" placeholder="用户名" @keyup.enter="handleLogin">
+            <el-form-item prop="userName">
+                <el-input ref="userName" v-model="loginForm.userName" placeholder="用户名" @keyup.enter="handleLogin">
                     <template #prefix>
                         <el-icon><User /></el-icon>
                     </template>
@@ -62,11 +62,11 @@ const codeUrl = ref(`${baseURL}auth/captcha`);
 const randomId = ref(randomNum(24, 16));
 const imageCode = ref("");
 const loginForm = reactive({
-    user_name: "",
+    userName: "",
     password: "",
 });
 const rules = reactive({
-    user_name: {
+    userName: {
         required: true,
         message: "不能为空",
         trigger: "blur",

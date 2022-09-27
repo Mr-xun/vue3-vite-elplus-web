@@ -2,7 +2,7 @@
  * @Author: xunxiao 17810204418@163.com
  * @Date: 2022-09-17 21:10:34
  * @LastEditors: xunxiao 17810204418@163.com
- * @LastEditTime: 2022-09-25 15:51:58
+ * @LastEditTime: 2022-09-27 21:37:51
  * @Description: request
  */
 import { ElNotification } from "element-plus";
@@ -86,10 +86,8 @@ service.interceptors.response.use((response) => {
             message: data.msg || "Error",
             type: "error",
         });
-        return Promise.reject(new Error(data.msg || "Error"));
-    } else {
-        return data;
-    }
+    } 
+    return data;
 }, ErrorHandle);
 
 export default service;

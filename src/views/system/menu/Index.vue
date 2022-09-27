@@ -4,7 +4,7 @@
             <el-col :xs="24" :sm="12">
                 <div class="app-container">
                     <div class="filter-container">
-                        <el-input v-model="menu_name" placeholder="名称" class="filter-item search-item" />
+                        <el-input v-model="menuName" placeholder="名称" class="filter-item search-item" />
                         <el-button class="filter-item" type="primary" plain @click="search">搜索</el-button>
                         <el-button class="filter-item" type="warning" plain @click="reset">重置</el-button>
                         <el-dropdown trigger="click" class="filter-item">
@@ -26,11 +26,11 @@
                             :data="menuTree"
                             :check-strictly="true"
                             :props="{
-                                label: 'menu_name',
+                                label: 'menuName',
                             }"
                             show-checkbox
                             accordion
-                            node-key="id"
+                            node-key="menuId"
                             highlight-current
                             :filter-node-method="filterNode"
                             @node-click="nodeClick"
@@ -42,18 +42,18 @@
                 <el-card class="box-card">
                     <template #header>
                         <div class="clearfix">
-                            <span>{{ menu.id === "" ? "新增" : "修改" }}</span>
+                            <span>{{ menu.menuId === "" ? "新增" : "修改" }}</span>
                         </div>
                     </template>
                     <div>
                         <el-form ref="form" :model="menu" :rules="rules" label-position="right" label-width="100px">
-                            <el-form-item label="上级菜单" prop="parent_id">
+                            <el-form-item label="上级菜单" prop="parentId">
                                 <el-tree-select
-                                    v-model="menu.parent_id"
+                                    v-model="menu.parentId"
                                     :data="menuTree"
-                                    node-key="id"
+                                    node-key="menuId"
                                     :props="{
-                                        label: 'menu_name',
+                                        label: 'menuName',
                                     }"
                                     filterable
                                     clearable
@@ -64,8 +64,8 @@
                                     class="w-full"
                                 />
                             </el-form-item>
-                            <el-form-item label="名称" prop="menu_name">
-                                <el-input v-model="menu.menu_name" clearable />
+                            <el-form-item label="名称" prop="menuName">
+                                <el-input v-model="menu.menuName" clearable />
                             </el-form-item>
                             <el-form-item label="类型" prop="type">
                                 <el-radio-group v-model="menu.type">
@@ -73,7 +73,7 @@
                                     <el-radio :label="2">按钮</el-radio>
                                 </el-radio-group>
                             </el-form-item>
-                            <el-form-item v-show="menu.type == 0" label="图标" prop="icon">
+                            <el-form-item v-show="menu.type == 1" label="图标" prop="icon">
                                 <el-input v-model="menu.icon">
                                     <template #append>
                                         <el-button style="padding-left: 0" @click="chooseIcons">
@@ -93,8 +93,8 @@
                             <el-form-item label="权限" prop="perms">
                                 <el-input v-model="menu.perms" clearable />
                             </el-form-item>
-                            <el-form-item v-show="menu.type == 1" label="排序" prop="order_num">
-                                <el-input-number v-model="menu.order_num" :min="0" :max="100" @change="handleNumChange" />
+                            <el-form-item v-show="menu.type == 1" label="排序" prop="orderNum">
+                                <el-input-number v-model="menu.orderNum" :min="0" :max="100" @change="handleNumChange" />
                             </el-form-item>
                         </el-form>
                     </div>
@@ -102,7 +102,7 @@
                 <el-card class="box-card" style="margin-top: -2rem">
                     <el-row>
                         <el-col :span="24" style="text-align: right">
-                            <el-button type="primary" plain :loading="buttonLoading" @click="submit">{{ menu.id === "" ? "新增" : "修改" }}</el-button>
+                            <el-button type="primary" plain :loading="buttonLoading" @click="submit">{{ menu.menuId === "" ? "新增" : "修改" }}</el-button>
                         </el-col>
                     </el-row>
                 </el-card>
@@ -126,10 +126,10 @@ export default {
             buttonLoading: false,
             selection: [],
             menuTree: [],
-            menu_name: "",
+            menuName: "",
             menu: this.initMenu(),
             rules: {
-                menu_name: [
+                menuName: [
                     {
                         required: true,
                         message: "不能为空",
@@ -171,14 +171,14 @@ export default {
         },
         initMenu() {
             return {
-                id: "",
-                menu_name: "",
-                parent_id: null,
+                menuId: "",
+                menuName: "",
+                parentId: null,
                 path: "",
                 component: "",
                 perms: "",
                 type: 1, //1 菜单 2 按钮
-                order_num: 0,
+                orderNum: 0,
                 icon: "",
             };
         },
@@ -186,7 +186,7 @@ export default {
             this.$download(
                 "system/menu/excel",
                 {
-                    menu_name: this.menu_name,
+                    menuName: this.menuName,
                 },
                 `menu_${new Date().getTime()}.xlsx`
             );
@@ -196,25 +196,24 @@ export default {
             return data.label.indexOf(value) !== -1;
         },
         nodeClick(data, node, v) {
-            this.menu.parent_id = data.parent_id;
-            if (this.menu.parent_id === "0") {
-                this.menu.parent_id = null;
+            this.menu.parentId = data.parentId;
+            if (this.menu.parentId === 0) {
+                this.menu.parentId = null;
             }
-            this.menu.order_num = data.order_num;
+            this.menu.orderNum = data.orderNum;
             this.menu.type = data.type;
             this.menu.perms = data.perms;
             this.menu.path = data.path;
             this.menu.component = data.component;
             this.menu.icon = data.icon;
-            this.menu.menu_name = data.menu_name;
-            this.menu.id = data.id;
+            this.menu.menuName = data.menuName;
+            this.menu.menuId = data.menuId;
             this.$refs.form.clearValidate();
         },
         handleNumChange(val) {
-            this.menu.order_num = val;
+            this.menu.orderNum = val;
         },
         chooseIcons() {
-            console.log(111);
             this.iconVisible = true;
         },
         chooseIcon(icon) {
@@ -225,27 +224,31 @@ export default {
             this.$refs.form.validate((valid) => {
                 if (valid) {
                     this.buttonLoading = true;
-                    if (this.menu.id) {
+                    if (this.menu.menuId) {
                         api.system_menu_update({
                             ...this.menu,
-                        }).then(() => {
+                        }).then(({ code }) => {
+                            if (code == 200) {
+                                ElMessage({
+                                    message: "修改成功",
+                                    type: "success",
+                                });
+                                this.reset();
+                            }
                             this.buttonLoading = false;
-                            ElMessage({
-                                message: "修改成功",
-                                type: "success",
-                            });
-                            this.reset();
                         });
                     } else {
                         api.system_menu_create({
                             ...this.menu,
-                        }).then(() => {
+                        }).then(({ code }) => {
+                            if (code == 200) {
+                                ElMessage({
+                                    message: "新增成功",
+                                    type: "success",
+                                });
+                                this.reset();
+                            }
                             this.buttonLoading = false;
-                            ElMessage({
-                                message: "新增成功",
-                                type: "success",
-                            });
-                            this.reset();
                         });
                     }
                 } else {
@@ -255,11 +258,11 @@ export default {
         },
         reset() {
             this.initMenuTree();
-            this.menu_name = "";
+            this.menuName = "";
             this.resetForm();
         },
         search() {
-            this.$refs.menuTree.filter(this.menu_name);
+            this.$refs.menuTree.filter(this.menuName);
         },
         add() {
             this.resetForm();
@@ -283,12 +286,14 @@ export default {
                 })
                     .then(() => {
                         let deleteIds = checked.join(",");
-                        api.system_menu_delete(deleteIds).then(() => {
-                            ElMessage({
-                                message: "删除成功",
-                                type: "success",
-                            });
-                            this.reset();
+                        api.system_menu_delete(deleteIds).then(({ code }) => {
+                            if (code == 200) {
+                                ElMessage({
+                                    message: "删除成功",
+                                    type: "success",
+                                });
+                                this.reset();
+                            }
                         });
                     })
                     .catch(() => {

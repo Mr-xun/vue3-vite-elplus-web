@@ -29,7 +29,7 @@
                             <el-table-column label="操作" align="center" width="150px" class-name="small-padding fixed-width" fixed="right">
                                 <template #default="{ row }">
                                     <el-icon class="table-operation" style="color: #2db7f5" @click="edit(row)"><Setting /></el-icon>
-                                    <el-icon class="table-operation" style="color: #f50" @click="edit(row)"><Delete /></el-icon>
+                                    <el-icon class="table-operation" style="color: #f50" @click="singleDelete(row)"><Delete /></el-icon>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -41,13 +41,13 @@
                 <el-card class="box-card">
                     <template #header>
                         <div class="clearfix">
-                            <span>{{ role.id === "" ? "新增" : "修改" }}</span>
+                            <span>{{ role.roleId === "" ? "新增" : "修改" }}</span>
                         </div>
                     </template>
                     <div>
                         <el-form ref="form" :model="role" :rules="rules" label-position="right" label-width="100px">
                             <el-form-item label="角色名称" prop="roleName">
-                                <el-input v-model="role.roleName" :readonly="role.id === '' ? false : 'readonly'" />
+                                <el-input v-model="role.roleName" :readonly="role.roleId === '' ? false : 'readonly'" />
                             </el-form-item>
                             <el-form-item label="角色描述">
                                 <el-input v-model="role.remark" type="textarea" rows="3" />
@@ -57,12 +57,12 @@
                                     ref="permsTree"
                                     :data="permsTree"
                                     :props="{
-                                        label: 'menu_name',
+                                        label: 'menuName',
                                     }"
                                     show-checkbox
                                     check-strictly
                                     accordion
-                                    node-key="id"
+                                    node-key="menuId"
                                     highlight-current
                                 />
                             </el-form-item>
@@ -72,7 +72,7 @@
                 <el-card class="box-card">
                     <el-row>
                         <el-col :span="24" style="text-align: right">
-                            <el-button type="primary" :loading="buttonLoading" plain @click="submit">{{ role.id === "" ? "新增" : "修改" }}</el-button>
+                            <el-button type="primary" :loading="buttonLoading" plain @click="submit">{{ role.roleId === "" ? "新增" : "修改" }}</el-button>
                         </el-col>
                     </el-row>
                 </el-card>
@@ -112,7 +112,11 @@ export default {
                         trigger: "blur",
                     },
                 ],
-                remark: { max: 50, message: "长度不能超过50个字符", trigger: "blur" },
+                remark: {
+                    max: 50,
+                    message: "长度不能超过50个字符",
+                    trigger: "blur",
+                },
             },
         };
     },
@@ -123,7 +127,7 @@ export default {
     methods: {
         initRole() {
             return {
-                id: "",
+                roleId: "",
                 roleName: "",
                 remark: "",
             };
@@ -180,7 +184,7 @@ export default {
                 .then(() => {
                     const roleIds = [];
                     this.selection.forEach((r) => {
-                        roleIds.push(r.id);
+                        roleIds.push(r.roleId);
                     });
                     this.delete(roleIds);
                 })
@@ -190,37 +194,43 @@ export default {
         },
         delete(deleteIds) {
             this.loading = true;
-            api.system_role_delete(deleteIds).then(() => {
-                ElMessage({
-                    message: "删除成功",
-                    type: "success",
-                });
-                this.search();
+            api.system_role_delete(deleteIds).then(({ code }) => {
+                if (code == 200) {
+                    ElMessage({
+                        message: "删除成功",
+                        type: "success",
+                    });
+                    this.search();
+                }
             });
         },
         submit() {
             this.$refs.form.validate((valid) => {
                 if (valid) {
                     this.buttonLoading = true;
-                    if (this.role.id) {
+                    if (this.role.roleId) {
                         this.role.menuIds = this.$refs.permsTree.getCheckedKeys().join(",");
-                        api.system_role_update({ ...this.role }).then(() => {
+                        api.system_role_update({ ...this.role }).then(({ code }) => {
+                            if (code == 200) {
+                                ElMessage({
+                                    message: "修改成功",
+                                    type: "success",
+                                });
+                                this.reset();
+                            }
                             this.buttonLoading = false;
-                            ElMessage({
-                                message: "修改成功",
-                                type: "success",
-                            });
-                            this.reset();
                         });
                     } else {
                         this.role.menuIds = this.$refs.permsTree.getCheckedKeys().join(",");
-                        api.system_role_create({ ...this.role }).then(() => {
+                        api.system_role_create({ ...this.role }).then(({ code }) => {
+                            if (code == 200) {
+                                ElMessage({
+                                    message: "新增成功",
+                                    type: "success",
+                                });
+                                this.reset();
+                            }
                             this.buttonLoading = false;
-                            ElMessage({
-                                message: "新增成功",
-                                type: "success",
-                            });
-                            this.reset();
                         });
                     }
                 } else {
