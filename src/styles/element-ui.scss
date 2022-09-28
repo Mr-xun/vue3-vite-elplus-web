@@ -5,9 +5,12 @@
     .el-col {
         height: 44px;
     }
+    .el-button{
+        margin-right: 5px;
+    }
 
     .el-button + .el-button {
-        margin-left: 5px;
+        margin-left: 0;
     }
 
     .el-button--small {

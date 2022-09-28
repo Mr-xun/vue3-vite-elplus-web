@@ -2,7 +2,7 @@
  * @Author: xunxiao
  * @Date: 2022-09-26 15:00:09
  * @LastEditors: xunxiao
- * @LastEditTime: 2022-09-27 14:15:41
+ * @LastEditTime: 2022-09-28 14:26:49
  * @Description: Routes
  */
 import Layout from "@/layout/index.vue";
@@ -73,6 +73,13 @@ export const routes = [
                 component: () => import("@/views/system/role/index.vue"),
                 meta: {
                     title: "角色管理",
+                },
+            },{
+                path: "/system/dept",
+                name: "SystemDeptIndex",
+                component: () => import("@/views/system/dept/index.vue"),
+                meta: {
+                    title: "部门管理",
                 },
             },
         ],

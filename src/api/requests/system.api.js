@@ -1,8 +1,8 @@
 /*
  * @Author: xunxiao 17810204418@163.com
  * @Date: 2022-09-18 17:06:54
- * @LastEditors: xunxiao 17810204418@163.com
- * @LastEditTime: 2022-09-27 21:22:09
+ * @LastEditors: xunxiao
+ * @LastEditTime: 2022-09-28 14:25:39
  * @Description: 系统接口
  */
 
@@ -74,5 +74,21 @@ export default {
     system_role_list(params) {
         //查询角色（分页）
         return request.get("/system/role/list", {params});
+    },
+    system_dept_create(params) {
+        //新增部门
+        return request.post("/system/dept/create", params);
+    },
+    system_dept_update(params) {
+        //更新部门
+        return request.put("/system/dept/update", params);
+    },
+    system_dept_delete(deleteIds) {
+        //删除部门
+        return request.delete(`/system/dept/delete/${deleteIds}`);
+    },
+    system_dept_tree(params) {
+        //查询部门tree
+        return request.get("/system/dept/tree", params);
     },
 };

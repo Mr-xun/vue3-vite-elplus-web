@@ -10,7 +10,7 @@
                         <el-dropdown trigger="click" class="filter-item">
                             <el-button>
                                 更多操作
-                                <i class="el-icon-arrow-down el-icon--right" />
+                                <el-icon class="el-icon--right"><arrow-down /></el-icon>
                             </el-button>
                             <template #dropdown>
                                 <el-dropdown-menu>
@@ -25,7 +25,7 @@
                             <el-table-column type="selection" align="center" width="40px" />
                             <el-table-column label="角色名称" prop="roleName" :show-overflow-tooltip="true" align="center" min-width="100px"> </el-table-column>
                             <el-table-column label="角色描述" prop="remark" :show-overflow-tooltip="true" align="center" min-width="200px"> </el-table-column>
-                            <el-table-column label="创建时间" prop="createdAt" :show-overflow-tooltip="true" align="center" min-width="180px"> </el-table-column>
+                            <el-table-column label="创建时间" prop="createTime" :show-overflow-tooltip="true" align="center" min-width="180px"> </el-table-column>
                             <el-table-column label="操作" align="center" width="150px" class-name="small-padding fixed-width" fixed="right">
                                 <template #default="{ row }">
                                     <el-icon class="table-operation" style="color: #2db7f5" @click="edit(row)"><Setting /></el-icon>
