@@ -133,8 +133,8 @@ export default {
             };
         },
         initMenuTree() {
-            api.system_menu_tree().then((res) => {
-                this.permsTree = res.data.rows;
+            api.system_menu_tree().then(({ data }) => {
+                this.permsTree = data;
             });
         },
         onSelectChange(selection) {
@@ -142,17 +142,6 @@ export default {
         },
         clearSelections() {
             this.$refs.table.clearSelection();
-        },
-        exportExcel() {
-            this.$download(
-                "system/role/excel",
-                {
-                    pageSize: this.pagination.pageSize,
-                    pageNum: this.pagination.pageNum,
-                    ...this.queryParams,
-                },
-                `role_${new Date().getTime()}.xlsx`
-            );
         },
         edit(row) {
             this.$refs.form.clearValidate();
@@ -193,7 +182,6 @@ export default {
                 });
         },
         delete(deleteIds) {
-            this.loading = true;
             api.system_role_delete(deleteIds).then(({ code }) => {
                 if (code == 200) {
                     ElMessage({

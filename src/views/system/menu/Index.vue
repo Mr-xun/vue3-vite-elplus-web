@@ -165,8 +165,8 @@ export default {
     },
     methods: {
         initMenuTree() {
-            api.system_menu_tree().then((res) => {
-                this.menuTree = res.data.rows;
+            api.system_menu_tree().then(({ data }) => {
+                this.menuTree = data;
             });
         },
         initMenu() {
@@ -182,18 +182,9 @@ export default {
                 icon: "",
             };
         },
-        exportExcel() {
-            this.$download(
-                "system/menu/excel",
-                {
-                    menuName: this.menuName,
-                },
-                `menu_${new Date().getTime()}.xlsx`
-            );
-        },
         filterNode(value, data) {
             if (!value) return true;
-            return data.label.indexOf(value) !== -1;
+            return data.menuName.indexOf(value) !== -1;
         },
         nodeClick(data, node, v) {
             this.menu.parentId = data.parentId;

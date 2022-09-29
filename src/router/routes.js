@@ -2,7 +2,7 @@
  * @Author: xunxiao
  * @Date: 2022-09-26 15:00:09
  * @LastEditors: xunxiao
- * @LastEditTime: 2022-09-28 14:26:49
+ * @LastEditTime: 2022-09-29 09:02:16
  * @Description: Routes
  */
 import Layout from "@/layout/index.vue";
@@ -19,8 +19,8 @@ import Layout from "@/layout/index.vue";
 */
 export const routes = [
     {
-        path: '/login',
-        name: '登录页',
+        path: "/login",
+        name: "登录页",
         component: () => import("@/views/login/index.vue"),
     },
     {
@@ -61,20 +61,30 @@ export const routes = [
         },
         children: [
             {
+                path: "/system/user",
+                name: "SystemUserIndex",
+                component: () => import("@/views/system/user/index.vue"),
+                meta: {
+                    title: "用户管理",
+                },
+            },
+            {
                 path: "/system/menu",
                 name: "SystemMenuIndex",
                 component: () => import("@/views/system/menu/index.vue"),
                 meta: {
                     title: "菜单管理",
                 },
-            },{
+            },
+            {
                 path: "/system/role",
                 name: "SystemRoleIndex",
                 component: () => import("@/views/system/role/index.vue"),
                 meta: {
                     title: "角色管理",
                 },
-            },{
+            },
+            {
                 path: "/system/dept",
                 name: "SystemDeptIndex",
                 component: () => import("@/views/system/dept/index.vue"),

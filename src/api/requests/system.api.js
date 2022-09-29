@@ -2,7 +2,7 @@
  * @Author: xunxiao 17810204418@163.com
  * @Date: 2022-09-18 17:06:54
  * @LastEditors: xunxiao
- * @LastEditTime: 2022-09-28 14:25:39
+ * @LastEditTime: 2022-09-29 10:49:19
  * @Description: 系统接口
  */
 
@@ -39,9 +39,25 @@ export default {
         //用户登录
         return request.post("/system/user/login", params);
     },
+    system_user_create(params) {
+        //新增用户
+        return request.post("/system/user/create", params);
+    },
+    system_user_update(params) {
+        //更新用户
+        return request.put("/system/user/update", params);
+    },
+    system_user_delete(deleteIds) {
+        //删除用户
+        return request.delete(`/system/user/delete/${deleteIds}`);
+    },
+    system_user_list(params) {
+        //查询用户（分页）
+        return request.get("/system/user/list", { params });
+    },
     system_user_all(params = {}) {
         //查询所有用户
-        return request.post("/system/user/getAllUsers", params);
+        return request.get("/system/user/all", { params });
     },
     system_menu_create(params) {
         //新增菜单
@@ -55,9 +71,9 @@ export default {
         //删除菜单
         return request.delete(`/system/menu/delete/${deleteIds}`);
     },
-    system_menu_tree(params) {
+    system_menu_tree() {
         //查询菜单tree
-        return request.get("/system/menu/tree", params);
+        return request.get("/system/menu/tree");
     },
     system_role_create(params) {
         //新增角色
@@ -73,7 +89,11 @@ export default {
     },
     system_role_list(params) {
         //查询角色（分页）
-        return request.get("/system/role/list", {params});
+        return request.get("/system/role/list", { params });
+    },
+    system_role_all() {
+        //查询所有角色
+        return request.get("/system/role/all");
     },
     system_dept_create(params) {
         //新增部门
@@ -87,8 +107,8 @@ export default {
         //删除部门
         return request.delete(`/system/dept/delete/${deleteIds}`);
     },
-    system_dept_tree(params) {
+    system_dept_tree() {
         //查询部门tree
-        return request.get("/system/dept/tree", params);
+        return request.get("/system/dept/tree");
     },
 };

@@ -121,7 +121,7 @@ export default {
         },
         initDeptTree() {
             api.system_dept_tree().then(({ data }) => {
-                this.deptTree = data.rows;
+                this.deptTree = data;
             });
         },
         handleNumChange(val) {
@@ -129,7 +129,7 @@ export default {
         },
         filterNode(value, data) {
             if (!value) return true;
-            return data.label.indexOf(value) !== -1;
+            return data.deptName.indexOf(value) !== -1;
         },
         nodeClick(data) {
             this.dept.parentId = data.parentId;
