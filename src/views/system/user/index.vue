@@ -264,10 +264,10 @@ export default {
             this.userViewVisible = true;
         },
         edit(row) {
-            let roleId = [];
-            if (row.roleId && typeof row.roleId === "string") {
-                roleId = row.roleId.split(",");
-                row.roleId = roleId;
+            let roleIds = [];
+            if (row.roleIds && typeof row.roleIds === "string") {
+                roleIds = row.roleIds.split(",");
+                row.roleIds = roleIds;
             }
             this.$refs.edit.setUser(row);
             this.dialog.title = "修改";

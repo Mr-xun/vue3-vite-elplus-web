@@ -147,7 +147,7 @@ export default {
             this.$refs.form.clearValidate();
             this.role = { ...row };
             if (this.role.menuIds) {
-                this.$refs.permsTree.setCheckedKeys(this.role.menuIds.split(","));
+                this.$refs.permsTree.setCheckedKeys(this.role.menuIds);
             } else {
                 this.$refs.permsTree.setCheckedKeys([]);
             }
@@ -197,7 +197,7 @@ export default {
                 if (valid) {
                     this.buttonLoading = true;
                     if (this.role.roleId) {
-                        this.role.menuIds = this.$refs.permsTree.getCheckedKeys().join(",");
+                        this.role.menuIds = this.$refs.permsTree.getCheckedKeys();
                         api.system_role_update({ ...this.role }).then(({ code }) => {
                             if (code == 200) {
                                 ElMessage({
@@ -209,7 +209,7 @@ export default {
                             this.buttonLoading = false;
                         });
                     } else {
-                        this.role.menuIds = this.$refs.permsTree.getCheckedKeys().join(",");
+                        this.role.menuIds = this.$refs.permsTree.getCheckedKeys();
                         api.system_role_create({ ...this.role }).then(({ code }) => {
                             if (code == 200) {
                                 ElMessage({

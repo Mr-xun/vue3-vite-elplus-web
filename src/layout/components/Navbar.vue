@@ -1,8 +1,8 @@
 <!--
  * @Author: xunxiao
  * @Date: 2022-09-19 08:24:39
- * @LastEditors: xunxiao 17810204418@163.com
- * @LastEditTime: 2022-09-25 20:09:59
+ * @LastEditors: xunxiao
+ * @LastEditTime: 2022-10-24 15:05:02
  * @Description: Navbar Component
 -->
 <template>
@@ -37,7 +37,7 @@ import Hamburger from "@/components/Hamburger/index.vue";
 import db from "@/utils/localstorage";
 const store = useStore();
 
-const sidebarCollapse = computed(() => store.state.setting.sidebar.opened);
+const sidebarCollapse = computed(() => !!store.state.setting.sidebar.opened);
 const userName = computed(() => store.state.account.user.user_name);
 const device = computed(() => store.state.setting.device);
 const avatar = computed(() => new URL(`../../assets/avatar/19034103295190235.jpg`, import.meta.url).href);

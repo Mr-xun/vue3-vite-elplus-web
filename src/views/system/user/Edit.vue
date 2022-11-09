@@ -44,8 +44,8 @@
                     :style="{ width: itemWidth }"
                 />
             </el-form-item>
-            <el-form-item label="角色：" prop="roleId">
-                <el-select :style="{ width: itemWidth }" v-model="user.roleId" multiple value placeholder>
+            <el-form-item label="角色：" prop="roleIds">
+                <el-select :style="{ width: itemWidth }" v-model="user.roleIds" multiple value placeholder>
                     <el-option v-for="item in roles" :key="item.roleId" :label="item.roleName" :value="String(item.roleId)" />
                 </el-select>
             </el-form-item>
@@ -126,7 +126,7 @@ export default {
                     },
                     trigger: "blur",
                 },
-                roleId: {
+                roleIds: {
                     required: true,
                     message: "不能为空",
                     trigger: "change",
@@ -171,7 +171,7 @@ export default {
                 description: "",
                 email: "",
                 mobile: "",
-                roleId: [],
+                roleIds: [],
                 gender: "",
                 status: "1",
                 userName: "",
@@ -211,7 +211,7 @@ export default {
                 if (valid) {
                     this.buttonLoading = true;
                     let params = { ...this.user };
-                    params.roleId = params.roleId.join(",");
+                    // params.roleIds = params.roleIds.join(",");
                     if (!params.userId) {
                         // create
                         api.system_user_create(params).then(({ code }) => {

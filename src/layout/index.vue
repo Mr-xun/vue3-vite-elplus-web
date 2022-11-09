@@ -2,13 +2,13 @@
  * @Author: xunxiao
  * @Date: 2022-09-19 08:24:40
  * @LastEditors: xunxiao
- * @LastEditTime: 2022-09-29 10:55:39
+ * @LastEditTime: 2022-11-09 11:04:06
  * @Description: Layout Component
 -->
 <template>
     <div :class="classObj" class="app-wrapper">
-        <div v-if="device === 'mobile' && sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
-        <sidebar v-if="isDevelopment" class="sidebar-container" />
+        <div v-if="device === 'mobile' && sidebarObj.opened" class="drawer-bg" @click="handleClickOutside" />
+        <sidebar class="sidebar-container" />
         <div :class="{ hasTagsView: needTagsView }" class="main-container">
             <div :class="{ 'fixed-header': fixedHeader }">
                 <navbar />
@@ -18,51 +18,34 @@
         </div>
     </div>
 </template>
-
-<script>
+<script setup>
 import { Navbar, Sidebar, AppMain, TagsView } from "./components/index.js";
-import ResizeMixin from "./mixin/ResizeHandler";
-import TableHeight from './mixin/TableHeight';
+import resizeHandler from "./hooks/resizeHandler";
+resizeHandler();
+const store = useStore();
+const sidebarObj = computed(() => store.state.setting.sidebar);
+const device = computed(() => store.state.setting.device);
+const needTagsView = computed(() => store.state.setting.multipage);
+const fixedHeader = computed(() => store.state.setting.fixHeader);
+
+const classObj = computed(() => {
+    return {
+        hideSidebar: !sidebarObj.value.opened,
+        openSidebar: sidebarObj.value.opened,
+        withoutAnimation: sidebarObj.value.withoutAnimation,
+        mobile: device.value === "mobile",
+    };
+});
+
+const handleClickOutside = () => {
+    store.commit("setting/closeSidebar", { withoutAnimation: false });
+};
+</script>
+<script>
+import TableHeight from "./mixin/TableHeight";
 export default {
     name: "Layout",
-    components: {
-        Navbar,
-        Sidebar,
-        AppMain,
-        TagsView
-    },
-    mixins: [ResizeMixin,TableHeight],
-    computed: {
-        sidebar() {
-            return this.$store.state.setting.sidebar;
-        },
-        device() {
-            return this.$store.state.setting.device;
-        },
-        needTagsView() {
-            return this.$store.state.setting.multipage;
-        },
-        fixedHeader() {
-            return this.$store.state.setting.fixHeader;
-        },
-        classObj() {
-            return {
-                hideSidebar: !this.sidebar.opened,
-                openSidebar: this.sidebar.opened,
-                withoutAnimation: this.sidebar.withoutAnimation,
-                mobile: this.device === "mobile",
-            };
-        },
-        isDevelopment() {
-            //开发环境
-            return import.meta.env.VUE_APP_FLAG === "dev";
-        },
-    },
-    methods: {
-        handleClickOutside() {
-            this.$store.commit("setting/closeSidebar", { withoutAnimation: false });
-        },
-    },
+    mixins: [TableHeight],
 };
 </script>
 
