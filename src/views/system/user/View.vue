@@ -28,7 +28,7 @@
             </el-col>
             <el-col :xs="24" :sm="12">
                 <div class="view-item">
-                    <el-icon><Trophy /></el-icon><span>角色：</span> {{ user.roleName }}
+                    <el-icon><Trophy /></el-icon><span>角色：</span> {{ user.roleNames.join(",") }}
                 </div>
             </el-col>
         </el-row>

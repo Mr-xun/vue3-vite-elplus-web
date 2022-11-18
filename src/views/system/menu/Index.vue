@@ -165,7 +165,7 @@ export default {
     },
     methods: {
         initMenuTree() {
-            api.system_menu_tree().then(({ data }) => {
+            api['system'].system_menu_tree().then(({ data }) => {
                 this.menuTree = data;
             });
         },

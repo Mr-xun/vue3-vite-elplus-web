@@ -2,7 +2,7 @@
  * @Author: xunxiao 17810204418@163.com
  * @Date: 2022-09-18 17:06:54
  * @LastEditors: xunxiao
- * @LastEditTime: 2022-09-26 17:20:08
+ * @LastEditTime: 2022-11-18 09:43:13
  * @Description: 系统接口
  */
 
@@ -39,12 +39,32 @@ export default {
         //用户登录
         return request.post("/system/user/login", params);
     },
+    getUserInfo() {
+        //获取用户详情
+        return request.get("/system/user/info");
+    },
+    system_user_create(params) {
+        //新增用户
+        return request.post("/system/user/create", params);
+    },
+    system_user_update(params) {
+        //更新用户
+        return request.put("/system/user/update", params);
+    },
+    system_user_delete(deleteIds) {
+        //删除用户
+        return request.delete(`/system/user/delete/${deleteIds}`);
+    },
+    system_user_list(params) {
+        //查询用户（分页）
+        return request.get("/system/user/list", { params });
+    },
     system_user_all(params = {}) {
         //查询所有用户
-        return request.post("/system/user/getAllUsers", params);
+        return request.get("/system/user/all", { params });
     },
     system_menu_create(params) {
-        //新增菜单-
+        //新增菜单
         return request.post("/system/menu/create", params);
     },
     system_menu_update(params) {
@@ -55,8 +75,44 @@ export default {
         //删除菜单
         return request.delete(`/system/menu/delete/${deleteIds}`);
     },
-    system_menu_tree(params) {
+    system_menu_tree() {
         //查询菜单tree
-        return request.get("/system/menu/tree", params);
+        return request.get("/system/menu/tree");
+    },
+    system_role_create(params) {
+        //新增角色
+        return request.post("/system/role/create", params);
+    },
+    system_role_update(params) {
+        //更新角色
+        return request.put("/system/role/update", params);
+    },
+    system_role_delete(deleteIds) {
+        //删除角色
+        return request.delete(`/system/role/delete/${deleteIds}`);
+    },
+    system_role_list(params) {
+        //查询角色（分页）
+        return request.get("/system/role/list", { params });
+    },
+    system_role_all() {
+        //查询所有角色
+        return request.get("/system/role/all");
+    },
+    system_dept_create(params) {
+        //新增部门
+        return request.post("/system/dept/create", params);
+    },
+    system_dept_update(params) {
+        //更新部门
+        return request.put("/system/dept/update", params);
+    },
+    system_dept_delete(deleteIds) {
+        //删除部门
+        return request.delete(`/system/dept/delete/${deleteIds}`);
+    },
+    system_dept_tree() {
+        //查询部门tree
+        return request.get("/system/dept/tree");
     },
 };

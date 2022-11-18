@@ -51,7 +51,7 @@
 import db from "@/utils/localstorage";
 import { randomNum } from "@/utils";
 import baseURL from "@/utils/baseURL";
-import api from "@/api/system";
+import api from "@/api";
 import { ref } from "vue";
 const router = useRouter();
 const store = useStore();
@@ -84,9 +84,11 @@ const handleLogin = () => {
     unref(form).validate((valid) => {
         if (valid) {
             loading.value = true;
-            api.login(loginForm)
+            api["system"]
+                .login(loginForm)
                 .then(({ data }) => {
-                    saveLoginData(data);
+                    saveLoginToken(data);
+                    getUserInfo();
                     ElMessage({
                         message: "登录成功",
                         type: "success",
@@ -101,9 +103,13 @@ const handleLogin = () => {
         }
     });
 };
-const saveLoginData = (data) => {
+
+const getUserInfo = async () => {
+    const { data } = await api["system"].getUserInfo();
+    store.commit("account/setUser", data);
+};
+const saveLoginToken = (data) => {
     store.commit("account/setAccessToken", data.token);
-    store.commit("account/setUser", data.userInfo);
 };
 const getCodeImage = () => {
     axios({

@@ -2,7 +2,7 @@
  * @Author: xunxiao 17810204418@163.com
  * @Date: 2022-09-18 17:06:54
  * @LastEditors: xunxiao
- * @LastEditTime: 2022-09-29 10:49:19
+ * @LastEditTime: 2022-11-18 14:00:51
  * @Description: 系统接口
  */
 
@@ -38,6 +38,14 @@ export default {
     login(params) {
         //用户登录
         return request.post("/system/user/login", params);
+    },
+    getUserInfo() {
+        //获取用户详情
+        return request.get("/system/user/info");
+    },
+    getUserMenu() {
+        //用户权限菜单
+        return request.get("/system/user/menu");
     },
     system_user_create(params) {
         //新增用户

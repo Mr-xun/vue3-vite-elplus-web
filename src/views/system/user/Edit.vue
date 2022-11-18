@@ -46,7 +46,7 @@
             </el-form-item>
             <el-form-item label="角色：" prop="roleIds">
                 <el-select :style="{ width: itemWidth }" v-model="user.roleIds" multiple value placeholder>
-                    <el-option v-for="item in roles" :key="item.roleId" :label="item.roleName" :value="String(item.roleId)" />
+                    <el-option v-for="item in roles" :key="item.roleId" :label="item.roleName" :value="item.roleId" />
                 </el-select>
             </el-form-item>
             <el-form-item label="性别：" prop="gender">
@@ -62,8 +62,8 @@
             </el-form-item>
             <el-form-item label="状态：" prop="status">
                 <el-radio-group v-model="user.status" :style="{ width: itemWidth }">
-                    <el-radio label="1">有效</el-radio>
-                    <el-radio label="2">禁用</el-radio>
+                    <el-radio :label="1">有效</el-radio>
+                    <el-radio :label="2">禁用</el-radio>
                 </el-radio-group>
             </el-form-item>
         </el-form>
@@ -77,8 +77,7 @@
 </template>
 <script>
 import { validMobile } from "@/utils/my-validate";
-import { mapGetters } from "vuex";
-import api from "@/api";
+import api from "@/api/system";
 export default {
     name: "UserEdit",
     props: {
@@ -173,7 +172,7 @@ export default {
                 mobile: "",
                 roleIds: [],
                 gender: "",
-                status: "1",
+                status: 1,
                 userName: "",
                 realName: "",
             };

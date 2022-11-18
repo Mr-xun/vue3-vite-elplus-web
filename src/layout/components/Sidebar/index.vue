@@ -2,7 +2,7 @@
  * @Author: xunxiao
  * @Date: 2022-09-19 08:24:40
  * @LastEditors: xunxiao
- * @LastEditTime: 2022-09-26 15:12:58
+ * @LastEditTime: 2022-11-18 14:44:42
  * @Description: Sidebar Component
 -->
 <template>
@@ -18,7 +18,7 @@
             mode="vertical"
             router
         >
-            <sidebar-item v-for="route in menuRoutes" :key="route.path" :route="route" :base-path="route.path" />
+            <sidebar-item v-for="route in userRoutes" :key="route.path" :route="route" :base-path="route.path" />
         </el-menu>
     </el-scrollbar>
 </template>
@@ -36,9 +36,7 @@ const activeMenu = computed(() => {
     }
     return route.path;
 });
-const sidebarCollapse = computed(() => {
-    return !store.state.setting.sidebar.opened;
-});
-
+const sidebarCollapse = computed(() => !store.state.setting.sidebar.opened);
+const userRoutes = computed(() => [...menuRoutes.value, ...store.state.account.routes]);
 const variables = reactive(sassVariables);
 </script>

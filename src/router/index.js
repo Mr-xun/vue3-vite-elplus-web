@@ -1,16 +1,17 @@
 /*
  * @Author: xunxiao 17810204418@163.com
  * @Date: 2022-09-17 22:08:49
- * @LastEditors: xunxiao 17810204418@163.com
- * @LastEditTime: 2022-09-25 16:25:18
+ * @LastEditors: xunxiao
+ * @LastEditTime: 2022-11-18 14:45:21
  * @Description: Router
  */
 import { createRouter, createWebHashHistory } from "vue-router";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
-import db from '@/utils/localstorage';
-import request from '@/utils/request';
-import store from '@/store/index';
+import db from "@/utils/localstorage";
+import request from "@/utils/request";
+import api from "@/api";
+import store from "@/store/index";
 import { routes } from "./routes";
 const VUE_APP_ROOT_PATH = import.meta.env.VUE_APP_ROOT_PATH;
 const router = createRouter({
@@ -37,14 +38,14 @@ router.beforeEach((to, from, next) => {
     } else {
         const token = db.get("ACCESS_TOKEN");
         const user = db.get("USER");
-        const userRouter = db.get("USER_ROUTER");
+        const userRouter = db.get("USER_ROUTER", null);
         if (token.length && user) {
-            if (asyncRouter) {
+            if (!asyncRouter) {
                 if (!userRouter) {
-                    request.get(`system/menu/${user.username}`).then((res) => {
-                        const permissions = res.data.data.permissions;
+                    api["system"].getUserMenu().then(({ data }) => {
+                        const permissions = data.permissions;
                         store.commit("account/setPermissions", permissions);
-                        asyncRouter = res.data.data.routes;
+                        asyncRouter = data.routes;
                         store.commit("account/setRoutes", asyncRouter);
                         save("USER_ROUTER", asyncRouter);
                         go(to, next);
@@ -71,7 +72,7 @@ router.afterEach(() => {
 
 function go(to, next) {
     asyncRouter = filterAsyncRouter(asyncRouter);
-    router.addRoutes(asyncRouter);
+    asyncRouter.forEach((route) => router.addRoute(route));
     next({ ...to, replace: true });
 }
 
@@ -98,4 +99,5 @@ function filterAsyncRouter(routes) {
         }
     });
 }
+
 export default router;

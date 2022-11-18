@@ -51,7 +51,7 @@
                 <el-table-column label="用户名" prop="userName" :show-overflow-tooltip="true" align="center" min-width="120px"></el-table-column>
                 <el-table-column label="性别" class-name="status-col">
                     <template #default="{ row }">
-                        <el-tag :type="row.gender">{{ transSex(row.gender) }}</el-tag>
+                        <el-tag :type="sexFilter(row.gender)">{{ transSex(row.gender) }}</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="部门" prop="deptName" align="center" min-width="110px"> </el-table-column>
@@ -78,7 +78,7 @@
 import Pagination from "@/components/Pagination/index.vue";
 import UserEdit from "./Edit.vue";
 import UserView from "./View.vue";
-import api from "@/api";
+import api from "@/api/system";
 import { mapGetters } from "vuex";
 export default {
     name: "UserManage",
@@ -132,6 +132,14 @@ export default {
         this.fetch();
     },
     methods: {
+        sexFilter(status) {
+            const map = {
+                1: "success",
+                2: "danger",
+                0: "info",
+            };
+            return map[status];
+        },
         transSex(gender) {
             switch (Number(gender)) {
                 case 1:

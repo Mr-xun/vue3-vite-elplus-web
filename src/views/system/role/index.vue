@@ -82,7 +82,7 @@
 </template>
 <script>
 import Pagination from "@/components/Pagination/index.vue";
-import api from "@/api";
+import api from "@/api/system";
 export default {
     name: "RoleManage",
     components: { Pagination },
