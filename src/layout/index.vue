@@ -2,7 +2,7 @@
  * @Author: xunxiao
  * @Date: 2022-09-19 08:24:40
  * @LastEditors: xunxiao
- * @LastEditTime: 2022-11-09 11:04:06
+ * @LastEditTime: 2022-11-29 15:13:55
  * @Description: Layout Component
 -->
 <template>
@@ -37,16 +37,7 @@ const classObj = computed(() => {
     };
 });
 
-const handleClickOutside = () => {
-    store.commit("setting/closeSidebar", { withoutAnimation: false });
-};
-</script>
-<script>
-import TableHeight from "./mixin/TableHeight";
-export default {
-    name: "Layout",
-    mixins: [TableHeight],
-};
+const handleClickOutside = () => store.commit("setting/closeSidebar", { withoutAnimation: false });
 </script>
 
 <style lang="scss" scoped>

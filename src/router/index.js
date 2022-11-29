@@ -2,7 +2,7 @@
  * @Author: xunxiao 17810204418@163.com
  * @Date: 2022-09-17 22:08:49
  * @LastEditors: xunxiao
- * @LastEditTime: 2022-11-18 14:45:21
+ * @LastEditTime: 2022-11-29 17:11:31
  * @Description: Router
  */
 import { createRouter, createWebHashHistory } from "vue-router";

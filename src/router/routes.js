@@ -2,7 +2,7 @@
  * @Author: xunxiao
  * @Date: 2022-09-26 15:00:09
  * @LastEditors: xunxiao
- * @LastEditTime: 2022-09-29 09:02:16
+ * @LastEditTime: 2022-11-29 16:02:48
  * @Description: Routes
  */
 import Layout from "@/layout/index.vue";
@@ -19,9 +19,28 @@ import Layout from "@/layout/index.vue";
 */
 export const routes = [
     {
+        path: "/redirect",
+        component: Layout,
+        hidden: true,
+        children: [
+            {
+                path: "/redirect/:paths*",
+                component: () => import("@/views/redirect/index.vue"),
+            },
+        ],
+    },
+    {
+        path: "/404",
+        component: () => import("@/views/error-page/404"),
+        hidden: true,
+    },
+    {
         path: "/login",
         name: "登录页",
         component: () => import("@/views/login/index.vue"),
+        meta: {
+            hidden: true,
+        },
     },
     {
         path: "/",

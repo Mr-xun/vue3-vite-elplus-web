@@ -2,27 +2,18 @@
     <section class="app-main">
         <router-view v-slot="{ Component }">
             <transition name="fade-transform" mode="out-in">
-                <component :is="Component" :key="$route.path" />
+                <component :is="Component" @vnode-mounted="componentMounted" :key="$route.path" />
             </transition>
         </router-view>
     </section>
 </template>
-
-<script>
-export default {
-    name: "AppMain",
-};
+<script setup>
+import setTableHeight from "../hooks/setTableHeight";
+let getTableHeight = setTableHeight();
+const componentMounted = () => getTableHeight.initHeight();//重置页面table height
+provide("tableHeight", getTableHeight.tableHeight); //设置页面table height
 </script>
-
 <style lang="scss" scoped>
-.app-main {
-    /*50 = navbar  */
-    min-height: calc(100vh - 93px);
-    position: relative;
-    overflow: hidden;
-    background-color: #f5f5f5;
-    /* height: 100vh; */
-}
 .app-main {
     /* 50= navbar  50  */
     min-height: calc(100vh - 50px);

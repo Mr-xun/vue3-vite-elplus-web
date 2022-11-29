@@ -2,16 +2,11 @@
  * @Author: xunxiao
  * @Date: 2022-09-19 08:24:40
  * @LastEditors: xunxiao
- * @LastEditTime: 2022-09-21 15:29:38
+ * @LastEditTime: 2022-11-29 15:13:06
  * @Description: settings
  */
-import defaultSettings from "@/utils/settings";
 import db from "@/utils/localstorage";
-const { fixedHeader, sidebarLogo } = defaultSettings;
-
 const state = {
-    fixedHeader: fixedHeader,
-    sidebarLogo: sidebarLogo,
     settingBar: {
         opened: false,
     },

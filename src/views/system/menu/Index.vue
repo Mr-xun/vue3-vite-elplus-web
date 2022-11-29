@@ -84,10 +84,10 @@
                                     </template>
                                 </el-input>
                             </el-form-item>
-                            <el-form-item v-show="menu.type == 0" label="URL" prop="path">
+                            <el-form-item v-show="menu.type == 1" label="URL" prop="path">
                                 <el-input v-model="menu.path" clearable />
                             </el-form-item>
-                            <el-form-item v-show="menu.type == 0" label="组件" prop="component">
+                            <el-form-item v-show="menu.type == 1" label="组件" prop="component">
                                 <el-input v-model="menu.component" clearable />
                             </el-form-item>
                             <el-form-item label="权限" prop="perms">

@@ -2,7 +2,7 @@
  * @Author: xunxiao
  * @Date: 2022-09-19 08:24:39
  * @LastEditors: xunxiao
- * @LastEditTime: 2022-10-24 15:05:02
+ * @LastEditTime: 2022-11-29 15:02:29
  * @Description: Navbar Component
 -->
 <template>
@@ -42,9 +42,7 @@ const userName = computed(() => store.state.account.user.user_name);
 const device = computed(() => store.state.setting.device);
 const avatar = computed(() => new URL(`../../assets/avatar/19034103295190235.jpg`, import.meta.url).href);
 
-const toggleSideBar = () => {
-    store.commit("setting/toggleSidebar");
-};
+const toggleSideBar = () => store.commit("setting/toggleSidebar");
 const logout = () => {
     db.clear();
     location.reload();

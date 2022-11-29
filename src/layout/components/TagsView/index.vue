@@ -29,12 +29,13 @@
         </ul>
     </div>
 </template>
-<script>
+<script setup>
 import ScrollPane from "./ScrollPane.vue";
 import path from "path";
+</script>
+<script>
 
 export default {
-    components: { ScrollPane },
     data() {
         return {
             visible: false,
