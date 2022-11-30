@@ -84,8 +84,7 @@ const handleLogin = () => {
     unref(form).validate((valid) => {
         if (valid) {
             loading.value = true;
-            api["system"]
-                .login(loginForm)
+            api.login(loginForm)
                 .then(({ data }) => {
                     saveLoginToken(data);
                     getUserInfo();
@@ -105,7 +104,7 @@ const handleLogin = () => {
 };
 
 const getUserInfo = async () => {
-    const { data } = await api["system"].getUserInfo();
+    const { data } = await api.getUserInfo();
     store.commit("account/setUser", data);
 };
 const saveLoginToken = (data) => {

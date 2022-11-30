@@ -49,7 +49,7 @@
         </div>
         <div class="table-cls">
             <el-card shadow="never">
-                <el-table size="small" v-loading="tableData.loading" :data="tableData.list" :height="tableHeightV" :header-cell-style="{ background: '#d0e6ffa8' }" border fit>
+                <el-table size="small" v-loading="tableData.loading" :data="tableData.list" :height="tableHeight" :header-cell-style="{ background: '#d0e6ffa8' }" border fit>
                     <el-table-column label="用户ID" prop="userId" align="center" show-overflow-tooltip min-width="100"></el-table-column>
                     <el-table-column label="业务来源" prop="businessSource" align="center" show-overflow-tooltip min-width="90">
                         <template #default="{ row }">
@@ -92,7 +92,6 @@
 <script setup>
 import Pagination from "@/components/Pagination/index.vue";
 import trackerRequest from "@/api/tracker";
-import tableHeight from "@/hooks/tableHeight";
 import days from "dayjs";
 
 const store = useStore();
@@ -100,7 +99,7 @@ const store = useStore();
 //业务来源下拉数据
 const businessSourceOptions = unref(computed(() => store.state.basic.businessSource));
 //table高度
-const { tableHeightV } = tableHeight(2, 2);
+const tableHeight = inject("tableHeight");
 
 //事件类型下拉数据
 const eventTypeOptions = [

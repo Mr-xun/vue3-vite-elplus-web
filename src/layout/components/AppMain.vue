@@ -10,7 +10,7 @@
 <script setup>
 import setTableHeight from "../hooks/setTableHeight";
 let getTableHeight = setTableHeight();
-const componentMounted = () => getTableHeight.initHeight();//重置页面table height
+const componentMounted = () => getTableHeight.initHeight(); //重置页面table height
 provide("tableHeight", getTableHeight.tableHeight); //设置页面table height
 </script>
 <style lang="scss" scoped>

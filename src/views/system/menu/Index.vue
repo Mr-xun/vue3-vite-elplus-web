@@ -165,7 +165,7 @@ export default {
     },
     methods: {
         initMenuTree() {
-            api["system"].system_menu_tree().then(({ data }) => {
+            api.system_menu_tree().then(({ data }) => {
                 this.menuTree = data;
             });
         },
@@ -216,10 +216,9 @@ export default {
                 if (valid) {
                     this.buttonLoading = true;
                     if (this.menu.menuId) {
-                        api["system"]
-                            .system_menu_update({
-                                ...this.menu,
-                            })
+                        api.system_menu_update({
+                            ...this.menu,
+                        })
                             .then(({ code }) => {
                                 if (code == 200) {
                                     ElMessage({
@@ -235,20 +234,18 @@ export default {
                                 this.buttonLoading = false;
                             });
                     } else {
-                        api["system"]
-                            .system_menu_create({
-                                ...this.menu,
-                            })
-                            .then(({ code }) => {
-                                if (code == 200) {
-                                    ElMessage({
-                                        message: "新增成功",
-                                        type: "success",
-                                    });
-                                    this.reset();
-                                }
-                                this.buttonLoading = false;
-                            });
+                        api.system_menu_create({
+                            ...this.menu,
+                        }).then(({ code }) => {
+                            if (code == 200) {
+                                ElMessage({
+                                    message: "新增成功",
+                                    type: "success",
+                                });
+                                this.reset();
+                            }
+                            this.buttonLoading = false;
+                        });
                     }
                 } else {
                     return false;

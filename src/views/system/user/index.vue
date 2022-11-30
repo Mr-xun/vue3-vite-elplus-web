@@ -44,7 +44,6 @@
                 :header-cell-style="{ background: '#eef1f6', color: '#606266' }"
                 stripe
                 @selection-change="onSelectChange"
-                :max-height="tableHeight"
             >
                 <el-table-column type="selection" align="center" width="40px" />
                 <el-table-column label="姓名" prop="realName" :show-overflow-tooltip="true" align="center" min-width="120px"></el-table-column>
@@ -69,7 +68,7 @@
             </el-table>
             <pagination v-show="total > 0" :total="total" v-model:page="pagination.pageNum" v-model:limit="pagination.pageSize" @pagination="fetch" />
             <user-edit ref="edit" :dialog-visible="dialog.isVisible" :title="dialog.title" @success="editSuccess" @close="editClose" />
-            <user-view ref="view" :dialog-visible="userViewVisible" @close="viewClose" />
+            <user-view ref="view" v-model="userViewVisible" />
         </div>
     </div>
 </template>
@@ -78,7 +77,7 @@
 import Pagination from "@/components/Pagination/index.vue";
 import UserEdit from "./Edit.vue";
 import UserView from "./View.vue";
-import api from "@/api/system";
+import api from "@/api";
 import { mapGetters } from "vuex";
 export default {
     name: "UserManage",

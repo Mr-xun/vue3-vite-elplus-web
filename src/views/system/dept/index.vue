@@ -85,7 +85,7 @@
     </div>
 </template>
 <script>
-import api from "@/api/system";
+import api from "@/api";
 export default {
     name: "DeptManager",
     data() {

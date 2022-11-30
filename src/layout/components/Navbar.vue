@@ -2,7 +2,7 @@
  * @Author: xunxiao
  * @Date: 2022-09-19 08:24:39
  * @LastEditors: xunxiao
- * @LastEditTime: 2022-11-29 15:02:29
+ * @LastEditTime: 2022-11-30 09:05:21
  * @Description: Navbar Component
 -->
 <template>
@@ -31,7 +31,7 @@
         </div>
     </div>
 </template>
-<script setup>
+<script setup >
 import Breadcrumb from "@/components/Breadcrumb/index.vue";
 import Hamburger from "@/components/Hamburger/index.vue";
 import db from "@/utils/localstorage";

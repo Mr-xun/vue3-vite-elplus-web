@@ -77,7 +77,7 @@
 </template>
 <script>
 import { validMobile } from "@/utils/my-validate";
-import api from "@/api/system";
+import api from "@/api";
 export default {
     name: "UserEdit",
     props: {

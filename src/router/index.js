@@ -42,7 +42,7 @@ router.beforeEach((to, from, next) => {
         if (token.length && user) {
             if (!asyncRouter) {
                 if (!userRouter) {
-                    api["system"].getUserMenu().then(({ data }) => {
+                    api.getUserMenu().then(({ data }) => {
                         const permissions = data.permissions;
                         store.commit("account/setPermissions", permissions);
                         asyncRouter = data.routes;

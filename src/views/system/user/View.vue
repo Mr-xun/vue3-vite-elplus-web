@@ -82,77 +82,52 @@
         </el-row>
     </el-dialog>
 </template>
-<script>
-export default {
-    name: "UserView",
-    props: {
-        dialogVisible: {
-            type: Boolean,
-            default: false,
-        },
+<script setup>
+const props = defineProps({
+    modelValue: {
+        type: Boolean,
+        default: false,
     },
-    data() {
-        return {
-            screenWidth: 0,
-            width: this.initWidth(),
-            user: {},
-        };
-    },
-    computed: {
-        isVisible: {
-            get() {
-                return this.dialogVisible;
-            },
-            set() {
-                this.close();
-            },
-        },
-        avatar() {
-            if (this.user.avatar) {
-                return new URL(`../../assets/avatar/19034103295190235.jpg`, import.meta.url).href;
-            } else {
-                return new URL(`../../assets/avatar/default.jpg`, import.meta.url).href;
-            }
-        },
-    },
-    mounted() {
-        window.onresize = () => {
-            return (() => {
-                this.width = this.initWidth();
-            })();
-        };
-    },
-    methods: {
-        transSex(sex) {
-            switch (Number(sex)) {
-                case 1:
-                    return "男";
-                case 2:
-                    return "女";
-                default:
-                    return "保密";
-            }
-        },
-        initWidth() {
-            this.screenWidth = document.body.clientWidth;
-            if (this.screenWidth < 550) {
-                return "95%";
-            } else if (this.screenWidth < 990) {
-                return "580px";
-            } else if (this.screenWidth < 1400) {
-                return "750px";
-            } else {
-                return "900px";
-            }
-        },
-        setUser(val) {
-            this.user = { ...val };
-        },
-        close() {
-            this.$emit("close");
-        },
-    },
+});
+const screenWidth = ref(0);
+const user = ref({});
+const initWidth = () => {
+    screenWidth.value = document.body.clientWidth;
+    if (screenWidth.value < 550) {
+        return "95%";
+    } else if (screenWidth.value < 990) {
+        return "580px";
+    } else if (screenWidth.value < 1400) {
+        return "750px";
+    } else {
+        return "900px";
+    }
 };
+const width = initWidth();
+const emits = defineEmits(["update:modelValue"]);
+const isVisible = computed({
+    get: () => props.modelValue,
+    set: (val) => emits("update:modelValue", val),
+});
+const avatar = computed(() => {
+    if (user.value.avatar) {
+        return new URL(`../../../assets/avatar/19034103295190235.jpg`, import.meta.url).href;
+    } else {
+        return new URL(`../../../assets/avatar/default.jpg`, import.meta.url).href;
+    }
+});
+const transSex = (sex) => {
+    switch (Number(sex)) {
+        case 1:
+            return "男";
+        case 2:
+            return "女";
+        default:
+            return "保密";
+    }
+};
+const setUser = (val) => (user.value = { ...val });
+defineExpose({ setUser });
 </script>
 <style lang="scss" scoped>
 .user-view {

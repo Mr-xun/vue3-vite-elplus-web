@@ -2,7 +2,7 @@
  * @Author: xunxiao
  * @Date: 2022-09-13 14:08:02
  * @LastEditors: xunxiao
- * @LastEditTime: 2022-09-13 15:31:00
+ * @LastEditTime: 2022-11-30 14:14:00
  * @Description: 业务弹窗组件
 -->
 <template>
@@ -33,7 +33,7 @@
 <script setup>
 import "../FormSubLabel/index.vue";
 const props = defineProps({
-    visible: {
+    modelValue: {
         type: Boolean,
         default: false,
     },
@@ -58,10 +58,10 @@ const props = defineProps({
         default: false,
     },
 });
-const emits = defineEmits(["input", "beforeClose"]);
+const emits = defineEmits(["update:modelValue", "beforeClose"]);
 const isVisible = computed({
-    get: () => props.visible,
-    set: (val) => emits("input", val),
+    get: () => props.modelValue,
+    set: (val) => emits("update:modelValue", val),
 });
 </script>
 <style lang="scss">
