@@ -1,6 +1,6 @@
 <template>
     <el-dialog v-model="isVisible" :title="title" :width="width" top="50px" :close-on-click-modal="false" :close-on-press-escape="false" draggable>
-        <el-form ref="form" :inline="true" :model="user" :rules="rules" label-position="right" label-width="140px">
+        <el-form ref="formRef" :inline="true" :model="user" :rules="rules" label-position="right" label-width="140px">
             <!-- <el-form-item label="机构：" prop="orgId">
                 <el-select :style="{ width: itemWidth }" v-model="user.orgId" @change="getTargetName($event, 'id', 'orgArchives', 'orgName')" filterable >
                     <el-option v-for="item in orgArchives" :key="item.id" :label="item.name" :value="item.id"></el-option>
@@ -75,181 +75,158 @@
         </template>
     </el-dialog>
 </template>
-<script>
+<script setup>
 import { validMobile } from "@/utils/my-validate";
 import api from "@/api";
-export default {
-    name: "UserEdit",
-    props: {
-        dialogVisible: {
-            type: Boolean,
-            default: false,
-        },
-        title: {
-            type: String,
-            default: "",
-        },
+const props = defineProps({
+    dialogVisible: {
+        type: Boolean,
+        default: false,
     },
-    data() {
-        return {
-            itemWidth: "295px",
-            user: this.initUser(),
-            buttonLoading: false,
-            screenWidth: 0,
-            width: this.initWidth(),
-            roles: [],
-            deptTree: [],
-            rules: {
-                realName: [{ required: true, message: "不能为空", trigger: "blur" }],
-                userName: [
-                    { required: true, message: "不能为空", trigger: "blur" },
-                    {
-                        min: 4,
-                        max: 10,
-                        message: "长度在 4 到 10 个字符",
-                        trigger: "blur",
-                    },
-                ],
-                email: {
-                    type: "email",
-                    message: "请输入正确的邮箱地址",
-                    trigger: "blur",
-                },
-                mobile: {
-                    validator: (rule, value, callback) => {
-                        if (value !== "" && !validMobile(value)) {
-                            callback("请输入合法的手机号");
-                        } else {
-                            callback();
-                        }
-                    },
-                    trigger: "blur",
-                },
-                roleIds: {
-                    required: true,
-                    message: "不能为空",
-                    trigger: "change",
-                },
-                gender: { required: true, message: "不能为空", trigger: "change" },
-                status: {
-                    required: true,
-                    message: "不能为空",
-                    trigger: "blur",
-                },
-            },
-        };
+    title: {
+        type: String,
+        default: "",
     },
-    computed: {
-        // ...mapGetters("basic", ["orgArchives"]),
-
-        isVisible: {
-            get() {
-                return this.dialogVisible;
-            },
-            set() {
-                this.close();
-                this.reset();
-            },
-        },
-    },
-    mounted() {
-        this.initDept();
-        this.initRoles();
-        window.onresize = () => {
-            return (() => {
-                this.width = this.initWidth();
-            })();
-        };
-    },
-    methods: {
-        initUser() {
-            return {
-                orgId: "",
-                avatar: "",
-                deptId: null,
-                description: "",
-                email: "",
-                mobile: "",
-                roleIds: [],
-                gender: "",
-                status: 1,
-                userName: "",
-                realName: "",
-            };
-        },
-        getTargetName(val, key, options, targetKey) {
-            this[options].forEach((item) => {
-                if (item[key] == val) {
-                    this.user[targetKey] = item.name;
-                }
-            });
-        },
-        initWidth() {
-            this.screenWidth = document.body.clientWidth;
-
-            return "1000px";
-        },
-        initDept() {
-            api.system_dept_tree().then(({ data }) => {
-                this.deptTree = data;
-            });
-        },
-        initRoles() {
-            api.system_role_all().then(({ data }) => {
-                this.roles = data;
-            });
-        },
-        setUser(val) {
-            this.user = { ...val };
-        },
-        close() {
-            this.$emit("close");
-        },
-        submitForm() {
-            this.$refs.form.validate((valid) => {
-                if (valid) {
-                    this.buttonLoading = true;
-                    let params = { ...this.user };
-                    // params.roleIds = params.roleIds.join(",");
-                    if (!params.userId) {
-                        // create
-                        api.system_user_create(params).then(({ code }) => {
-                            if (code == 200) {
-                                this.isVisible = false;
-                                ElMessage({
-                                    message: "新增成功",
-                                    type: "success",
-                                });
-                                this.$emit("success");
-                            }
-                            this.buttonLoading = false;
-                        });
-                    } else {
-                        // update
-                        api.system_user_update({ ...this.user }).then(({ code }) => {
-                            if (code == 200) {
-                                this.isVisible = false;
-                                ElMessage({
-                                    message: "修改成功",
-                                    type: "success",
-                                });
-                                this.$emit("success");
-                            }
-                            this.buttonLoading = false;
-                        });
-                    }
-                } else {
-                    return false;
-                }
-            });
-        },
-        reset() {
-            // 先清除校验，再清除表单，不然有奇怪的bug
-            this.$refs.form.clearValidate();
-            this.$refs.form.resetFields();
-            this.user = this.initUser();
-        },
-    },
+});
+const itemWidth = ref("295px");
+const initUser = () => {
+    return {
+        orgId: "",
+        avatar: "",
+        deptId: null,
+        description: "",
+        email: "",
+        mobile: "",
+        roleIds: [],
+        gender: "",
+        status: 1,
+        userName: "",
+        realName: "",
+    };
 };
+const user = ref(initUser());
+const buttonLoading = ref(false);
+const screenWidth = ref(0);
+const initWidth = () => {
+    screenWidth.value = document.body.clientWidth;
+    return "1000px";
+};
+const width = ref(initWidth());
+const roles = ref([]);
+const deptTree = ref([]);
+const formRef = ref(null);
+const rules = reactive({
+    realName: [{ required: true, message: "不能为空", trigger: "blur" }],
+    userName: [
+        { required: true, message: "不能为空", trigger: "blur" },
+        {
+            min: 4,
+            max: 10,
+            message: "长度在 4 到 10 个字符",
+            trigger: "blur",
+        },
+    ],
+    email: {
+        type: "email",
+        message: "请输入正确的邮箱地址",
+        trigger: "blur",
+    },
+    mobile: {
+        validator: (rule, value, callback) => {
+            if (value !== "" && !validMobile(value)) {
+                callback("请输入合法的手机号");
+            } else {
+                callback();
+            }
+        },
+        trigger: "blur",
+    },
+    roleIds: {
+        required: true,
+        message: "不能为空",
+        trigger: "change",
+    },
+    gender: { required: true, message: "不能为空", trigger: "change" },
+    status: {
+        required: true,
+        message: "不能为空",
+        trigger: "blur",
+    },
+});
+const emits = defineEmits(["close", "success"]);
+const close = () => emits("close");
+const reset = () => {
+    // 先清除校验，再清除表单，不然有奇怪的bug
+    unref(formRef).clearValidate();
+    unref(formRef).resetFields();
+    user.value = initUser();
+};
+
+const setUser = (val) => {
+    user.value = { ...val };
+};
+const submitForm = () => {
+    unref(formRef).validate((valid) => {
+        if (valid) {
+            buttonLoading.value = true;
+            let params = { ...unref(user) };
+            if (!params.userId) {
+                // create
+                api.system_user_create(params).then(({ code }) => {
+                    if (code == 200) {
+                        isVisible.value = false;
+                        ElMessage({
+                            message: "新增成功",
+                            type: "success",
+                        });
+                        emits("success");
+                    }
+                    buttonLoading.value = false;
+                });
+            } else {
+                // update
+                api.system_user_update(params).then(({ code }) => {
+                    if (code == 200) {
+                        isVisible.value = false;
+                        ElMessage({
+                            message: "修改成功",
+                            type: "success",
+                        });
+                        emits("success");
+                    }
+                    buttonLoading.value = false;
+                });
+            }
+        } else {
+            return false;
+        }
+    });
+};
+const initDept = () => {
+    api.system_dept_tree().then(({ data = [] }) => {
+        deptTree.value = data;
+    });
+};
+const initRoles = () => {
+    api.system_role_all().then(({ data = [] }) => {
+        roles.value = data;
+    });
+};
+const isVisible = computed({
+    get: () => props.dialogVisible,
+    set: () => {
+        close();
+        reset();
+    },
+});
+onMounted(() => {
+    initDept();
+    initRoles();
+    window.onresize = () => {
+        return (() => {
+            width.value = initWidth();
+        })();
+    };
+});
+defineExpose({ setUser });
 </script>
-<style lang="scss" scoped></style>

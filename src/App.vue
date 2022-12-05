@@ -1,8 +1,8 @@
 <!--
  * @Author: xunxiao 17810204418@163.com
  * @Date: 2022-09-17 21:10:34
- * @LastEditors: xunxiao 17810204418@163.com
- * @LastEditTime: 2022-09-17 21:13:10
+ * @LastEditors: xunxiao
+ * @LastEditTime: 2022-12-03 16:40:26
  * @Description: app-vue
 -->
 <template>
@@ -20,9 +20,6 @@ export default defineComponent({
         ElConfigProvider,
     },
     setup() {
-        const store = useStore();
-        onBeforeMount(() => {
-        });
         return {
             locale: zhCn,
         };
