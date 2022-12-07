@@ -1,44 +1,11 @@
 <template>
     <el-dialog v-model="isVisible" title="图标" :width="width" top="50px" :close-on-click-modal="false" :close-on-press-escape="false">
         <el-tabs v-model="activeName" style="margin-top: -1rem">
-            <el-tab-pane label="系统" name="first">
+            <el-tab-pane v-for="item in iconsTab" :label="item.label" :name="item.name" :key="item.name">
                 <ul>
-                    <li v-for="icon in icons.systemIcons" :key="icon">
+                    <li v-for="icon in item.icons" :key="icon">
                         <span :class="{ active: activeIndex === icon }">
-                            <el-icon :title="icon" @click="chooseIcon(icon)">
-                                <component :is="icon"></component>
-                            </el-icon>
-                        </span>
-                    </li>
-                </ul>
-            </el-tab-pane>
-            <el-tab-pane label="指向性" name="second">
-                <ul>
-                    <li v-for="icon in icons.directivityIcons" :key="icon">
-                        <span :class="{ active: activeIndex === icon }">
-                            <el-icon :title="icon" @click="chooseIcon(icon)">
-                                <component :is="icon"></component>
-                            </el-icon>
-                        </span>
-                    </li>
-                </ul>
-            </el-tab-pane>
-            <el-tab-pane label="填充类" name="third">
-                <ul>
-                    <li v-for="icon in icons.solidIcons" :key="icon">
-                        <span :class="{ active: activeIndex === icon }">
-                            <el-icon :title="icon" @click="chooseIcon(icon)">
-                                <component :is="icon"></component>
-                            </el-icon>
-                        </span>
-                    </li>
-                </ul>
-            </el-tab-pane>
-            <el-tab-pane label="食品类" name="fourth">
-                <ul>
-                    <li v-for="icon in icons.foodIcons" :key="icon">
-                        <span :class="{ active: activeIndex === icon }">
-                            <el-icon :title="icon" @click="chooseIcon(icon)">
+                            <el-icon :title="icon" :size="28" @click="chooseIcon(icon)">
                                 <component :is="icon"></component>
                             </el-icon>
                         </span>
@@ -54,8 +21,8 @@
         </template>
     </el-dialog>
 </template>
-<script>
-const systemIcons = [
+<script setup>
+const SystemIcons = [
     "Plus",
     "Minus",
     "CirclePlus",
@@ -145,199 +112,311 @@ const systemIcons = [
     "RemoveFilled",
     "CirclePlusFilled",
 ];
-const directivityIcons = [
-    "el-icon-d-caret",
-    "el-icon-caret-left",
-    "el-icon-caret-right",
-    "el-icon-caret-bottom",
-    "el-icon-caret-top",
-    "el-icon-bottom-left",
-    "el-icon-bottom-right",
-    "el-icon-back",
-    "el-icon-right",
-    "el-icon-bottom",
-    "el-icon-top",
-    "el-icon-top-left",
-    "el-icon-top-right",
-    "el-icon-arrow-left",
-    "el-icon-arrow-right",
-    "el-icon-arrow-down",
-    "el-icon-arrow-up",
-    "el-icon-d-arrow-left",
-    "el-icon-d-arrow-right",
-    "el-icon-sort",
-    "el-icon-sort-up",
-    "el-icon-sort-down",
-    "el-icon-rank",
+const ArrowIcons = [
+    "ArrowLeft",
+    "ArrowUp",
+    "ArrowRight",
+    "ArrowDown",
+    "ArrowLeftBold",
+    "ArrowUpBold",
+    "ArrowRightBold",
+    "ArrowDownBold",
+    "DArrowRight",
+    "DArrowLeft",
+    "Download",
+    "Upload",
+    "Top",
+    "Bottom",
+    "Back",
+    "Right",
+    "TopRight",
+    "TopLeft",
+    "BottomRight",
+    "BottomLeft",
+    "Sort",
+    "SortUp",
+    "SortDown",
+    "Rank",
+    "CaretLeft",
+    "CaretTop",
+    "CaretRight",
+    "CaretBottom",
+    "DCaret",
+    "Expand",
+    "Fold",
 ];
-const solidIcons = [
-    "el-icon-question",
-    "el-icon-info",
-    "el-icon-remove",
-    "el-icon-circle-plus",
-    "el-icon-success",
-    "el-icon-error",
-    "el-icon-platform-eleme",
-    "el-icon-delete-solid",
-    "el-icon-s-tools",
-    "el-icon-user-solid",
-    "el-icon-phone",
-    "el-icon-star-on",
-    "el-icon-s-goods",
-    "el-icon-warning",
-    "el-icon-s-help",
-    "el-icon-picture",
-    "el-icon-upload",
-    "el-icon-camera-solid",
-    "el-icon-video-camera-solid",
-    "el-icon-message-solid",
-    "el-icon-s-cooperation",
-    "el-icon-s-order",
-    "el-icon-s-platform",
-    "el-icon-s-fold",
-    "el-icon-s-unfold",
-    "el-icon-s-operation",
-    "el-icon-s-promotion",
-    "el-icon-s-home",
-    "el-icon-s-release",
-    "el-icon-s-ticket",
-    "el-icon-s-management",
-    "el-icon-s-open",
-    "el-icon-s-shop",
-    "el-icon-s-marketing",
-    "el-icon-s-flag",
-    "el-icon-s-comment",
-    "el-icon-s-finance",
-    "el-icon-s-claim",
-    "el-icon-s-custom",
-    "el-icon-s-opportunity",
-    "el-icon-s-data",
-    "el-icon-s-check",
-    "el-icon-s-grid",
-    "el-icon-menu",
-    "el-icon-share",
-    "el-icon-d-caret",
-    "el-icon-caret-left",
-    "el-icon-caret-right",
-    "el-icon-caret-bottom",
-    "el-icon-caret-top",
-    "el-icon-location",
+const DocumentIcons = [
+    "DocumentAdd",
+    "Document",
+    "Notebook",
+    "Tickets",
+    "Memo",
+    "Collection",
+    "Postcard",
+    "ScaleToOriginal",
+    "SetUp",
+    "DocumentDelete",
+    "DocumentChecked",
+    "DataBoard",
+    "DataAnalysis",
+    "CopyDocument",
+    "FolderChecked",
+    "Files",
+    "Folder",
+    "FolderDelete",
+    "FolderRemove",
+    "FolderOpened",
+    "DocumentCopy",
+    "DocumentRemove",
+    "FolderAdd",
+    "FirstAidKit",
+    "Reading",
+    "DataLine",
+    "Management",
+    "Checked",
+    "Ticket",
+    "Failed",
+    "TrendCharts",
+    "List",
 ];
-const foodIcons = [
-    "el-icon-dish",
-    "el-icon-dish-1",
-    "el-icon-food",
-    "el-icon-chicken",
-    "el-icon-fork-spoon",
-    "el-icon-knife-fork",
-    "el-icon-burger",
-    "el-icon-tableware",
-    "el-icon-sugar",
-    "el-icon-dessert",
-    "el-icon-ice-cream",
-    "el-icon-hot-water",
-    "el-icon-water-cup",
-    "el-icon-coffee-cup",
-    "el-icon-cold-drink",
-    "el-icon-goblet",
-    "el-icon-goblet-full",
-    "el-icon-goblet-square",
-    "el-icon-goblet-square-full",
-    "el-icon-refrigerator",
-    "el-icon-grape",
-    "el-icon-watermelon",
-    "el-icon-cherry",
-    "el-icon-apple",
-    "el-icon-pear",
-    "el-icon-orange",
-    "el-icon-coffee",
-    "el-icon-ice-tea",
-    "el-icon-ice-drink",
-    "el-icon-milk-tea",
-    "el-icon-potato-strips",
-    "el-icon-lollipop",
-    "el-icon-ice-cream-square",
-    "el-icon-ice-cream-round",
+const MediaIcons = [
+    "Microphone",
+    "Mute",
+    "Mic",
+    "VideoPause",
+    "VideoCamera",
+    "VideoPlay",
+    "Headset",
+    "Monitor",
+    "Film",
+    "Camera",
+    "Picture",
+    "PictureRounded",
+    "Iphone",
+    "Cellphone",
+    "VideoCameraFilled",
+    "PictureFilled",
+    "Platform",
+    "CameraFilled",
+    "BellFilled",
 ];
-export default {
-    name: "Icons",
-    props: {
-        dialogVisible: {
-            type: Boolean,
-            default: false,
-        },
+const TrafficIcons = [
+    "Location",
+    "LocationInformation",
+    "DeleteLocation",
+    "Coordinate",
+    "Bicycle",
+    "OfficeBuilding",
+    "School",
+    "Guide",
+    "AddLocation",
+    "MapLocation",
+    "Place",
+    "LocationFilled",
+    "Van",
+];
+const FoodIcons = [
+    "Watermelon",
+    "Pear",
+    "NoSmoking",
+    "Smoking",
+    "Mug",
+    "GobletSquareFull",
+    "GobletFull",
+    "KnifeFork",
+    "Sugar",
+    "Bowl",
+    "MilkTea",
+    "Lollipop",
+    "Coffee",
+    "Chicken",
+    "Dish",
+    "IceTea",
+    "ColdDrink",
+    "CoffeeCup",
+    "DishDot",
+    "IceDrink",
+    "IceCream",
+    "Dessert",
+    "IceCreamSquare",
+    "ForkSpoon",
+    "IceCreamRound",
+    "Food",
+    "HotWater",
+    "Grape",
+    "Fries",
+    "Apple",
+    "Burger",
+    "Goblet",
+    "GobletSquare",
+    "Orange",
+    "Cherry",
+];
+const ToolIcons = [
+    "Printer",
+    "Calendar",
+    "CreditCard",
+    "Box",
+    "Money",
+    "Refrigerator",
+    "Cpu",
+    "Football",
+    "Brush",
+    "Suitcase",
+    "SuitcaseLine",
+    "Umbrella",
+    "AlarmClock",
+    "Medal",
+    "GoldMedal",
+    "Present",
+    "Mouse",
+    "Watch",
+    "QuartzWatch",
+    "Magnet",
+    "Help",
+    "Soccer",
+    "ToiletPaper",
+    "ReadingLamp",
+    "Paperclip",
+    "MagicStick",
+    "Basketball",
+    "Baseball",
+    "Coin",
+    "Goods",
+    "Sell",
+    "SoldOut",
+    "Key",
+    "ShoppingCart",
+    "ShoppingCartFull",
+    "ShoppingTrolley",
+    "Phone",
+    "Scissor",
+    "Handbag",
+    "ShoppingBag",
+    "Trophy",
+    "TrophyBase",
+    "Stopwatch",
+    "Timer",
+    "CollectionTag",
+    "TakeawayBox",
+    "PriceTag",
+    "Wallet",
+    "Opportunity",
+    "PhoneFilled",
+    "WalletFilled",
+    "GoodsFilled",
+    "Flag",
+    "BrushFilled",
+    "Briefcase",
+    "Stamp",
+];
+const WeatherIcons = ["Sunrise", "Sunny", "Ship", "MostlyCloudy", "PartlyCloudy", "Sunset", "Drizzling", "Pouring", "Cloudy", "Moon", "MoonNight", "Lightning"];
+const OtherIcons = ["ChromeFilled", "Eleme", "ElemeFilled", "ElementPlus", "Shop", "SwitchFilled", "WindPower"];
+const props = defineProps({
+    dialogVisible: {
+        type: Boolean,
+        default: false,
     },
-    data() {
-        return {
-            icons: {
-                systemIcons,
-                directivityIcons,
-                solidIcons,
-                foodIcons,
-            },
-            activeIndex: "",
-            choosedIcon: "",
-            activeName: "first",
-            screenWidth: 0,
-            width: this.initWidth(),
-        };
+});
+const iconsTab = reactive([
+    {
+        label: "系统类",
+        name: "system",
+        icons: SystemIcons,
     },
-    computed: {
-        isVisible: {
-            get() {
-                console.log(this.dialogVisible);
-                return this.dialogVisible;
-            },
-            set() {
-                this.close();
-            },
-        },
+    {
+        label: "指向类",
+        name: "arrow",
+        icons: ArrowIcons,
     },
-    mounted() {
-        window.onresize = () => {
-            return (() => {
-                this.width = this.initWidth();
-            })();
-        };
+    {
+        label: "文档类",
+        name: "document",
+        icons: DocumentIcons,
     },
-    methods: {
-        initWidth() {
-            this.screenWidth = document.body.clientWidth;
-            if (this.screenWidth < 991) {
-                return "90%";
-            } else if (this.screenWidth < 1400) {
-                return "60%";
-            } else {
-                return "800px";
-            }
-        },
-        close() {
-            this.$emit("close");
-            this.activeName = "first";
-            this.choosedIcon = this.activeIndex = "";
-        },
-        chooseIcon(icon) {
-            this.activeIndex = icon;
-            this.choosedIcon = icon;
-            ElMessage({
-                message: "已选择：" + icon,
-                type: "success",
-            });
-        },
-        confirm() {
-            if (!this.choosedIcon) {
-                ElMessage({
-                    message: "尚未选择任何图标",
-                    type: "warning",
-                });
-                return;
-            }
-            this.$emit("choose", this.choosedIcon);
-            this.activeName = "first";
-            this.choosedIcon = this.activeIndex = "";
-        },
+    {
+        label: "媒体类",
+        name: "media",
+        icons: MediaIcons,
     },
+    {
+        label: "交通类",
+        name: "traffic",
+        icons: TrafficIcons,
+    },
+    {
+        label: "食品类",
+        name: "food",
+        icons: FoodIcons,
+    },
+    {
+        label: "工具类",
+        name: "tool",
+        icons: ToolIcons,
+    },
+    {
+        label: "天气类",
+        name: "weather",
+        icons: WeatherIcons,
+    },
+    {
+        label: "其他",
+        name: "other",
+        icons: OtherIcons,
+    },
+]);
+const activeIndex = ref("");
+const selectedIcon = ref("");
+const activeName = ref("system");
+const screenWidth = ref(0);
+const initWidth = () => {
+    screenWidth.value = document.body.clientWidth;
+    if (unref(screenWidth) < 991) {
+        return "90%";
+    } else if (unref(screenWidth) < 1400) {
+        return "60%";
+    } else {
+        return "800px";
+    }
 };
+const width = ref(initWidth());
+const emits = defineEmits(["close", "choose"]);
+const close = () => emits("close");
+const chooseIcon = (icon) => {
+    activeIndex.value = icon;
+    selectedIcon.value = icon;
+    ElMessage({
+        message: "已选择：" + icon,
+        type: "success",
+    });
+};
+const confirm = () => {
+    if (!unref(selectedIcon)) {
+        ElMessage({
+            message: "尚未选择任何图标",
+            type: "warning",
+        });
+        return;
+    }
+    emits("choose", unref(selectedIcon));
+    activeName.value = "system";
+    selectedIcon.value = activeIndex.value = "";
+};
+const isVisible = computed({
+    get: () => props.dialogVisible,
+    set: () => {
+        close();
+        activeName.value = "system";
+        selectedIcon.value = activeIndex.value = "";
+    },
+});
+onMounted(() => {
+    window.onresize = () => {
+        return (() => {
+            width.value = initWidth();
+        })();
+    };
+});
 </script>
 <style lang="scss" scoped>
 ul {

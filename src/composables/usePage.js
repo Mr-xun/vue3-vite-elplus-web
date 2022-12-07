@@ -2,7 +2,7 @@
  * @Author: xunxiao
  * @Date: 2022-12-05 15:41:06
  * @LastEditors: xunxiao
- * @LastEditTime: 2022-12-05 17:52:53
+ * @LastEditTime: 2022-12-07 10:05:20
  * @Description: usePage 接收一个 opts 参数，返回列表所需数据
  */
 /**
@@ -13,7 +13,8 @@
  * @param {Function} opts.searchFunc  - 执行完 reset 后执行的回调
  * @param {Function} opts.resetFunc  - 执行完 reset 后执行的回调
  * @param {Function} opts.pageChangeFunc  - 执行完 paginationChange 后执行的回调
- * @param {Function} opts.deleteVerify  - 执行 batchDelete 前执行的函数 返回promise
+ * @param {Function} opts.deleteApi  - 删除数据的接口
+ * @param {Function} opts.deleteFrontFn  - 执行 batchDelete 前执行的函数 返回promise
  * @param {Function} opts.deleteFunc  - 执行完 deleteSubmit 后执行的回调
  * @param {Function} opts.addOrEditFunc  - 执行完 editSuccess 后执行的回调
  *
@@ -27,7 +28,8 @@ const usePage = (opts) => {
         searchFunc = () => {},
         resetFunc = () => {},
         pageChangeFunc = () => {},
-        deleteVerify = () => Promise.resolve(true),
+        deleteApi,
+        deleteFrontFn = () => Promise.resolve(null),
         deleteFunc = () => {},
         addOrEditFunc = () => {},
     } = opts;
@@ -105,42 +107,26 @@ const usePage = (opts) => {
             });
             return;
         }
-        //删除前校验
-        if (!(await deleteVerify())) {
+        //删除前置数据处理
+        let deleteIds = await deleteFrontFn();
+        if (!deleteIds) {
             clearSelections();
             return;
         }
-        let contain = false;
         ElMessageBox.confirm("选中数据将被永久删除, 是否继续？", "提示", {
             confirmButtonText: "确定",
             cancelButtonText: "取消",
             type: "warning",
         })
             .then(() => {
-                const userIds = [];
-                unref(selection).forEach((u) => {
-                    if (u.userId === unref(currentUser).userId) {
-                        contain = true;
-                        return;
-                    }
-                    userIds.push(u.userId);
-                });
-                if (contain) {
-                    ElMessage({
-                        message: "包含当前登录用户，操作已取消",
-                        type: "warning",
-                    });
-                    clearSelections();
-                } else {
-                    deleteSubmit(userIds);
-                }
+                deleteSubmit(deleteIds);
             })
             .catch(() => {
                 clearSelections();
             });
     };
     const deleteSubmit = (deleteIds) => {
-        api.system_user_delete(deleteIds).then(({ code }) => {
+        deleteApi(deleteIds).then(({ code }) => {
             if (code == 200) {
                 ElMessage({
                     message: "删除成功",

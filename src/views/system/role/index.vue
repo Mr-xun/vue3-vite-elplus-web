@@ -4,7 +4,7 @@
             <el-col :xs="24" :sm="14">
                 <div class="app-container">
                     <div class="filter-container">
-                        <el-input v-model="queryParams.roleName" placeholder="角色名称" class="filter-item search-item" />
+                        <el-input v-model="searchForm.roleName" placeholder="角色名称" class="filter-item search-item" />
                         <el-button class="filter-item" type="primary" plain @click="search">搜索</el-button>
                         <el-button class="filter-item" type="warning" plain @click="reset">重置</el-button>
                         <el-dropdown trigger="click" class="filter-item">
@@ -21,7 +21,16 @@
                         </el-dropdown>
                     </div>
                     <div class="center-container">
-                        <el-table ref="table" :key="tableKey" v-loading="loading" :data="list" border fit style="width: 100%" @selection-change="onSelectChange">
+                        <el-table
+                            ref="tableRef"
+                            v-loading="tableLoading"
+                            :data="tableData"
+                            :max-height="tableHeight"
+                            border
+                            fit
+                            style="width: 100%"
+                            @selection-change="onSelectChange"
+                        >
                             <el-table-column type="selection" align="center" width="40px" />
                             <el-table-column label="角色名称" prop="roleName" :show-overflow-tooltip="true" align="center" min-width="100px"> </el-table-column>
                             <el-table-column label="角色描述" prop="remark" :show-overflow-tooltip="true" align="center" min-width="200px"> </el-table-column>
@@ -33,7 +42,13 @@
                                 </template>
                             </el-table-column>
                         </el-table>
-                        <pagination v-show="total > 0" :total="total" v-model:page="pagination.pageNum" v-model:limit="pagination.pageSize" @pagination="fetch" />
+                        <pagination
+                            v-show="pagination.total > 0"
+                            :total="pagination.total"
+                            v-model:page="pagination.pageNum"
+                            v-model:limit="pagination.pageSize"
+                            @pagination="paginationChange"
+                        />
                     </div>
                 </div>
             </el-col>
@@ -45,7 +60,7 @@
                         </div>
                     </template>
                     <div>
-                        <el-form ref="form" :model="role" :rules="rules" label-position="right" label-width="100px">
+                        <el-form ref="formRef" :model="role" :rules="rules" label-position="right" label-width="100px">
                             <el-form-item label="角色名称" prop="roleName">
                                 <el-input v-model="role.roleName" :readonly="role.roleId === '' ? false : 'readonly'" />
                             </el-form-item>
@@ -54,7 +69,7 @@
                             </el-form-item>
                             <el-form-item label="角色权限">
                                 <el-tree
-                                    ref="permsTree"
+                                    ref="permsTreeRef"
                                     :data="permsTree"
                                     :props="{
                                         label: 'menuName',
@@ -80,191 +95,122 @@
         </el-row>
     </div>
 </template>
-<script>
+<script setup>
 import Pagination from "@/components/Pagination/index.vue";
+import usePage from "@/composables/usePage";
 import api from "@/api";
-export default {
-    name: "RoleManage",
-    components: { Pagination },
-    data() {
-        return {
-            tableKey: 0,
-            loading: false,
-            buttonLoading: false,
-            list: [],
-            selection: [],
-            total: 0,
-            permsTree: [],
-            queryParams: {},
-            sort: {},
-            pagination: {
-                pageSize: 10,
-                pageNum: 1,
-            },
-            role: this.initRole(),
-            rules: {
-                roleName: [
-                    { required: true, message: "不能为空", trigger: "blur" },
-                    {
-                        min: 3,
-                        max: 10,
-                        message: "长度在 3 到 10 个字符",
-                        trigger: "blur",
-                    },
-                ],
-                remark: {
-                    max: 50,
-                    message: "长度不能超过50个字符",
-                    trigger: "blur",
-                },
-            },
-        };
-    },
-    mounted() {
-        this.fetch();
-        this.initMenuTree();
-    },
-    methods: {
-        initRole() {
-            return {
-                roleId: "",
-                roleName: "",
-                remark: "",
-            };
-        },
-        initMenuTree() {
-            api.system_menu_tree().then(({ data }) => {
-                this.permsTree = data;
-            });
-        },
-        onSelectChange(selection) {
-            this.selection = selection;
-        },
-        clearSelections() {
-            this.$refs.table.clearSelection();
-        },
-        edit(row) {
-            this.$refs.form.clearValidate();
-            this.role = { ...row };
-            if (this.role.menuIds) {
-                this.$refs.permsTree.setCheckedKeys(this.role.menuIds);
-            } else {
-                this.$refs.permsTree.setCheckedKeys([]);
-            }
-        },
-        singleDelete(row) {
-            this.$refs.table.clearSelection();
-            this.$refs.table.toggleRowSelection(row, true);
-            this.batchDelete();
-        },
-        batchDelete() {
-            if (!this.selection.length) {
-                ElMessage({
-                    message: "请先选择需要操作的数据",
-                    type: "warning",
-                });
-                return;
-            }
-            ElMessageBox.confirm("选中数据将被永久删除, 是否继续？", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                type: "warning",
-            })
-                .then(() => {
-                    const roleIds = [];
-                    this.selection.forEach((r) => {
-                        roleIds.push(r.roleId);
-                    });
-                    this.delete(roleIds);
-                })
-                .catch(() => {
-                    this.clearSelections();
-                });
-        },
-        delete(deleteIds) {
-            api.system_role_delete(deleteIds).then(({ code }) => {
-                if (code == 200) {
-                    ElMessage({
-                        message: "删除成功",
-                        type: "success",
-                    });
-                    this.search();
-                }
-            });
-        },
-        submit() {
-            this.$refs.form.validate((valid) => {
-                if (valid) {
-                    this.buttonLoading = true;
-                    if (this.role.roleId) {
-                        this.role.menuIds = this.$refs.permsTree.getCheckedKeys();
-                        api.system_role_update({ ...this.role }).then(({ code }) => {
-                            if (code == 200) {
-                                ElMessage({
-                                    message: "修改成功",
-                                    type: "success",
-                                });
-                                this.reset();
-                            }
-                            this.buttonLoading = false;
-                        });
-                    } else {
-                        this.role.menuIds = this.$refs.permsTree.getCheckedKeys();
-                        api.system_role_create({ ...this.role }).then(({ code }) => {
-                            if (code == 200) {
-                                ElMessage({
-                                    message: "新增成功",
-                                    type: "success",
-                                });
-                                this.reset();
-                            }
-                            this.buttonLoading = false;
-                        });
-                    }
-                } else {
-                    return false;
-                }
-            });
-        },
-        add() {
-            this.resetForm();
-            ElMessage({
-                message: "请在表单中填写相关信息",
-                type: "info",
-            });
-        },
-        reset() {
-            this.pagination.pageNum = 1;
-            this.resetForm();
-            this.queryParams = {};
-            this.sort = {};
-            this.$refs.table.clearSort();
-            this.search();
-        },
-        resetForm() {
-            this.$refs.form.clearValidate();
-            this.$refs.form.resetFields();
-            this.role = this.initRole();
-            this.$refs.permsTree.setCheckedKeys([]);
-        },
-        search() {
-            this.resetForm();
-            this.pagination.pageNum = 1;
-            this.fetch();
-        },
-        fetch() {
-            let params = this.queryParams;
-            this.loading = true;
-            params.pageSize = this.pagination.pageSize;
-            params.pageNum = this.pagination.pageNum;
-            api.system_role_list({ ...params }).then(({ data }) => {
-                this.list = data.rows;
-                this.total = data.total;
-                this.loading = false;
-            });
-        },
-    },
+//table高度
+const tableHeight = inject("tableHeight");
+const searchForm = reactive({});
+
+//删除前置数据处理，用户校验
+const deleteFrontFn = () => {
+    return new Promise((resolve) => {
+        const roleIds = unref(selection).map((v) => v.roleId);
+        resolve(roleIds);
+    });
 };
+
+// 接收 查询参数、获取列表的接口 返回 列表所需要的数据、分页参数、分页函数等
+const { tableRef, tableData, tableLoading, search, reset, pagination, paginationChange, fetchData, selection, onSelectChange, singleDelete, batchDelete } = usePage({
+    searchForm,
+    searchFunc: () => resetForm(),
+    resetFunc: () => resetForm(),
+    getListApi: api.system_role_list,
+    deleteApi: api.system_role_delete,
+    deleteFrontFn,
+});
+const buttonLoading = ref(false);
+const permsTree = ref([]);
+const permsTreeRef = ref(null);
+const initRole = () => {
+    return {
+        roleId: "",
+        roleName: "",
+        remark: "",
+    };
+};
+const formRef = ref(null);
+const role = ref(initRole());
+const rules = reactive({
+    roleName: [
+        { required: true, message: "不能为空", trigger: "blur" },
+        {
+            min: 3,
+            max: 10,
+            message: "长度在 3 到 10 个字符",
+            trigger: "blur",
+        },
+    ],
+    remark: {
+        max: 50,
+        message: "长度不能超过50个字符",
+        trigger: "blur",
+    },
+});
+const initMenuTree = () => {
+    api.system_menu_tree().then(({ data }) => {
+        permsTree.value = data;
+    });
+};
+const resetForm = () => {
+    unref(formRef).clearValidate();
+    unref(formRef).resetFields();
+    role.value = initRole();
+    unref(permsTreeRef).setCheckedKeys([]);
+};
+
+const add = () => {
+    resetForm();
+    ElMessage({
+        message: "请在表单中填写相关信息",
+        type: "info",
+    });
+};
+const edit = (row) => {
+    unref(formRef).clearValidate();
+    role.value = { ...row };
+    if (unref(role).menuIds) {
+        unref(permsTreeRef).setCheckedKeys(unref(role).menuIds);
+    } else {
+        unref(permsTreeRef).setCheckedKeys([]);
+    }
+};
+const submit = () => {
+    unref(formRef).validate((valid) => {
+        if (valid) {
+            buttonLoading.value = true;
+            if (unref(role).roleId) {
+                role.value.menuIds = unref(permsTreeRef).getCheckedKeys();
+                api.system_role_update({ ...unref(role) }).then(({ code }) => {
+                    if (code == 200) {
+                        ElMessage({
+                            message: "修改成功",
+                            type: "success",
+                        });
+                        reset();
+                    }
+                    buttonLoading.value = false;
+                });
+            } else {
+                role.value.menuIds = unref(permsTreeRef).getCheckedKeys();
+                api.system_role_create({ ...unref(role) }).then(({ code }) => {
+                    if (code == 200) {
+                        ElMessage({
+                            message: "新增成功",
+                            type: "success",
+                        });
+                        reset();
+                    }
+                    buttonLoading.value = false;
+                });
+            }
+        } else {
+            return false;
+        }
+    });
+};
+onMounted(() => initMenuTree());
 </script>
 <style lang="scss" scoped>
 .role {

@@ -2,6 +2,9 @@
     <div class="app-container">
         <div class="filter-container">
             <el-form :inline="true" :model="searchForm">
+                <el-form-item label="用户名">
+                    <el-input v-model="searchForm.userName" placeholder="用户名" clearable @clear="search" @keyup.enter="search" class="filter-item search-item" />
+                </el-form-item>
                 <el-form-item label="姓名">
                     <el-input v-model="searchForm.realName" placeholder="姓名" clearable @clear="search" @keyup.enter="search" class="filter-item search-item" />
                 </el-form-item>
@@ -85,8 +88,8 @@ const searchForm = reactive({});
 
 const currentUser = computed(() => store.state.account.user);
 
-//删除用户校验
-const deleteVerify = () => {
+//删除前置数据处理，用户校验
+const deleteFrontFn = () => {
     return new Promise((resolve) => {
         let contain = false;
         const userIds = [];
@@ -102,9 +105,9 @@ const deleteVerify = () => {
                 message: "包含当前登录用户，操作已取消",
                 type: "warning",
             });
-            resolve(false);
+            resolve(null);
         } else {
-            resolve(true);
+            resolve(userIds);
         }
     });
 };
@@ -131,7 +134,8 @@ const {
 } = usePage({
     searchForm,
     getListApi: api.system_user_list,
-    deleteVerify,
+    deleteApi: api.system_user_delete,
+    deleteFrontFn,
 });
 
 const userViewVisible = ref(false);
