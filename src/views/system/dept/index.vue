@@ -22,7 +22,7 @@
                     </div>
                     <div class="center-container">
                         <el-tree
-                            ref="deptTree"
+                            ref="deptTreeRef"
                             :data="deptTree"
                             :check-strictly="true"
                             show-checkbox
@@ -46,7 +46,7 @@
                         </div>
                     </template>
                     <div>
-                        <el-form ref="form" :model="dept" :rules="rules" label-position="right" label-width="100px">
+                        <el-form ref="formRef" :model="dept" :rules="rules" label-position="right" label-width="100px">
                             <el-form-item label="上级部门" prop="parentId">
                                 <el-tree-select
                                     v-model="dept.parentId"
@@ -84,151 +84,145 @@
         </el-row>
     </div>
 </template>
-<script>
+<script setup>
 import api from "@/api";
-export default {
-    name: "DeptManager",
-    data() {
-        return {
-            deptName: "",
-            buttonLoading: false,
-            deptTree: [],
-            dept: this.initDept(),
-            rules: {
-                deptName: [
-                    { required: true, message: "不能为空", trigger: "blur" },
-                    {
-                        min: 3,
-                        max: 10,
-                        message: "长度在 3 到 10 个字符",
-                        trigger: "blur",
-                    },
-                ],
-            },
-        };
-    },
-    mounted() {
-        this.initDeptTree();
-    },
-    methods: {
-        initDept() {
-            return {
-                deptId: "",
-                deptName: "",
-                parentId: null,
-                orderNum: 0,
-            };
+defineOptions({
+    name: "DeptManage",
+});
+const deptName = ref("");
+const buttonLoading = ref(false);
+const formRef = ref(null);
+const deptTreeRef = ref(null);
+const deptTree = ref([]);
+const initDept = () => {
+    return {
+        deptId: "",
+        deptName: "",
+        parentId: null,
+        orderNum: 0,
+    };
+};
+const dept = ref(initDept());
+const rules = reactive({
+    deptName: [
+        { required: true, message: "不能为空", trigger: "blur" },
+        {
+            min: 3,
+            max: 10,
+            message: "长度在 3 到 10 个字符",
+            trigger: "blur",
         },
-        initDeptTree() {
-            api.system_dept_tree().then(({ data }) => {
-                this.deptTree = data;
+    ],
+});
+const handleNumChange = (val) => {
+    dept.value.orderNum = val;
+};
+const filterNode = (value, data) => {
+    if (!value) return true;
+    return data.deptName.indexOf(value) !== -1;
+};
+const nodeClick = (data) => {
+    dept.value.parentId = data.parentId;
+    if (dept.value.parentId === 0) {
+        dept.value.parentId = null;
+    }
+    dept.value.orderNum = data.orderNum;
+    dept.value.deptName = data.deptName;
+    dept.value.deptId = data.deptId;
+    unref(formRef).clearValidate();
+};
+const resetForm = () => {
+    unref(formRef).clearValidate();
+    unref(formRef).resetFields();
+    dept.value = initDept();
+};
+const add = () => {
+    resetForm();
+    ElMessage({
+        message: "请在表单中填写相关信息",
+        type: "info",
+    });
+};
+const deleteDept = () => {
+    const checked = unref(deptTreeRef).getCheckedKeys();
+    if (checked.length === 0) {
+        ElMessage({
+            message: "请先选择节点",
+            type: "warning",
+        });
+    } else {
+        ElMessageBox.confirm("选中节点及其子结点将被永久删除, 是否继续？", "提示", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning",
+        })
+            .then(() => {
+                let deleteIds = checked.join(",");
+                api.system_dept_delete(deleteIds).then(({ code }) => {
+                    if (code == 200) {
+                        ElMessage({
+                            message: "删除成功",
+                            type: "success",
+                        });
+                        reset();
+                    }
+                });
+            })
+            .catch(() => {
+                unref(deptTreeRef).setCheckedKeys([]);
             });
-        },
-        handleNumChange(val) {
-            this.dept.orderNum = val;
-        },
-        filterNode(value, data) {
-            if (!value) return true;
-            return data.deptName.indexOf(value) !== -1;
-        },
-        nodeClick(data) {
-            this.dept.parentId = data.parentId;
-            if (this.dept.parentId === 0) {
-                this.dept.parentId = null;
-            }
-            this.dept.orderNum = data.orderNum;
-            this.dept.deptName = data.deptName;
-            this.dept.deptId = data.deptId;
-            this.$refs.form.clearValidate();
-        },
-        add() {
-            this.resetForm();
-            ElMessage({
-                message: "请在表单中填写相关信息",
-                type: "info",
-            });
-        },
-        deleteDept() {
-            const checked = this.$refs.deptTree.getCheckedKeys();
-            if (checked.length === 0) {
-                ElMessage({
-                    message: "请先选择节点",
-                    type: "warning",
+    }
+};
+const search = () => {
+    unref(deptTreeRef).filter(unref(deptName));
+};
+const reset = () => {
+    initDeptTree();
+    deptName.value = "";
+    resetForm();
+};
+const submit = () => {
+    unref(formRef).validate((valid) => {
+        if (valid) {
+            buttonLoading.value = true;
+            if (unref(dept).deptId) {
+                api.system_dept_update({
+                    ...unref(dept),
+                }).then(({ code }) => {
+                    buttonLoading.value = false;
+                    if (code == 200) {
+                        ElMessage({
+                            message: "修改成功",
+                            type: "success",
+                        });
+                        reset();
+                    }
                 });
             } else {
-                ElMessageBox.confirm("选中节点及其子结点将被永久删除, 是否继续？", "提示", {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "warning",
-                })
-                    .then(() => {
-                        let deleteIds = checked.join(",");
-                        api.system_dept_delete(deleteIds).then(({ code }) => {
-                            if (code == 200) {
-                                ElMessage({
-                                    message: "删除成功",
-                                    type: "success",
-                                });
-                                this.reset();
-                            }
+                api.system_dept_create({
+                    ...unref(dept),
+                }).then(({ code }) => {
+                    if (code == 200) {
+                        ElMessage({
+                            message: "新增成功",
+                            type: "success",
                         });
-                    })
-                    .catch(() => {
-                        this.$refs.deptTree.setCheckedKeys([]);
-                    });
-            }
-        },
-        search() {
-            this.$refs.deptTree.filter(this.deptName);
-        },
-        reset() {
-            this.initDeptTree();
-            this.deptName = "";
-            this.resetForm();
-        },
-        submit() {
-            this.$refs.form.validate((valid) => {
-                if (valid) {
-                    this.buttonLoading = true;
-                    if (this.dept.deptId) {
-                        api.system_dept_update({
-                            ...this.dept,
-                        }).then(({ code }) => {
-                            this.buttonLoading = false;
-                            if (code == 200) {
-                                ElMessage({
-                                    message: "修改成功",
-                                    type: "success",
-                                });
-                                this.reset();
-                            }
-                        });
-                    } else {
-                        api.system_dept_create({
-                            ...this.dept,
-                        }).then(({ code }) => {
-                            if (code == 200) {
-                                ElMessage({
-                                    message: "新增成功",
-                                    type: "success",
-                                });
-                                this.reset();
-                            }
-                            this.buttonLoading = false;
-                        });
+                        reset();
                     }
-                } else {
-                    return false;
-                }
-            });
-        },
-        resetForm() {
-            this.$refs.form.clearValidate();
-            this.$refs.form.resetFields();
-            this.dept = this.initDept();
-        },
-    },
+                    buttonLoading.value = false;
+                });
+            }
+        } else {
+            return false;
+        }
+    });
 };
+const initDeptTree = () => {
+    api.system_dept_tree().then(({ data }) => {
+        deptTree.value = data;
+    });
+};
+onMounted(() => initDeptTree());
 </script>
 <style lang="scss" scoped>
 .dept {

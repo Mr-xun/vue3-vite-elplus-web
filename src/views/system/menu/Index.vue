@@ -22,7 +22,7 @@
                     </div>
                     <div class="center-container">
                         <el-tree
-                            ref="menuTree"
+                            ref="menuTreeRef"
                             :data="menuTree"
                             :check-strictly="true"
                             :props="{
@@ -46,7 +46,7 @@
                         </div>
                     </template>
                     <div>
-                        <el-form ref="form" :model="menu" :rules="rules" label-position="right" label-width="100px">
+                        <el-form ref="formRef" :model="menu" :rules="rules" label-position="right" label-width="100px">
                             <el-form-item label="上级菜单" prop="parentId">
                                 <el-tree-select
                                     v-model="menu.parentId"
@@ -111,199 +111,193 @@
         <Icons :dialog-visible="iconVisible" @close="iconVisible = false" @choose="chooseIcon" />
     </div>
 </template>
-
-<script>
+<script setup>
 import Icons from "./Icons.vue";
 import api from "@/api";
-export default {
+defineOptions({
     name: "MenuManage",
-    components: {
-        Icons,
+});
+const iconVisible = ref(false);
+const buttonLoading = ref(false);
+const formRef = ref(null);
+const menuTreeRef = ref(null);
+const menuTree = ref([]);
+const menuName = ref("");
+const initMenu = () => {
+    return {
+        menuId: "",
+        menuName: "",
+        parentId: null,
+        path: "",
+        component: "",
+        perms: "",
+        type: 1, //1 菜单 2 按钮
+        orderNum: 0,
+        icon: "",
+    };
+};
+const menu = ref(initMenu());
+const rules = reactive({
+    menuName: [
+        {
+            required: true,
+            message: "不能为空",
+            trigger: "blur",
+        },
+        {
+            min: 2,
+            max: 10,
+            message: "长度在 2 到 10 个字符",
+            trigger: "blur",
+        },
+    ],
+    path: {
+        max: 100,
+        message: "长度不能超过100个字符",
+        trigger: "blur",
     },
-    data() {
-        return {
-            iconVisible: false,
-            buttonLoading: false,
-            selection: [],
-            menuTree: [],
-            menuName: "",
-            menu: this.initMenu(),
-            rules: {
-                menuName: [
-                    {
-                        required: true,
-                        message: "不能为空",
-                        trigger: "blur",
-                    },
-                    {
-                        min: 2,
-                        max: 10,
-                        message: "长度在 2 到 10 个字符",
-                        trigger: "blur",
-                    },
-                ],
-                path: {
-                    max: 100,
-                    message: "长度不能超过100个字符",
-                    trigger: "blur",
-                },
-                component: {
-                    max: 100,
-                    message: "长度不能超过100个字符",
-                    trigger: "blur",
-                },
-                perms: {
-                    max: 50,
-                    message: "长度不能超过50个字符",
-                    trigger: "blur",
-                },
-            },
-        };
+    component: {
+        max: 100,
+        message: "长度不能超过100个字符",
+        trigger: "blur",
     },
-    mounted() {
-        this.initMenuTree();
+    perms: {
+        max: 50,
+        message: "长度不能超过50个字符",
+        trigger: "blur",
     },
-    methods: {
-        initMenuTree() {
-            api.system_menu_tree().then(({ data }) => {
-                this.menuTree = data;
-            });
-        },
-        initMenu() {
-            return {
-                menuId: "",
-                menuName: "",
-                parentId: null,
-                path: "",
-                component: "",
-                perms: "",
-                type: 1, //1 菜单 2 按钮
-                orderNum: 0,
-                icon: "",
-            };
-        },
-        filterNode(value, data) {
-            if (!value) return true;
-            return data.menuName.indexOf(value) !== -1;
-        },
-        nodeClick(data, node, v) {
-            this.menu.parentId = data.parentId;
-            if (this.menu.parentId === 0) {
-                this.menu.parentId = null;
-            }
-            this.menu.orderNum = data.orderNum;
-            this.menu.type = data.type;
-            this.menu.perms = data.perms;
-            this.menu.path = data.path;
-            this.menu.component = data.component;
-            this.menu.icon = data.icon;
-            this.menu.menuName = data.menuName;
-            this.menu.menuId = data.menuId;
-            this.$refs.form.clearValidate();
-        },
-        handleNumChange(val) {
-            this.menu.orderNum = val;
-        },
-        chooseIcons() {
-            this.iconVisible = true;
-        },
-        chooseIcon(icon) {
-            this.menu.icon = icon;
-            this.iconVisible = false;
-        },
-        submit() {
-            this.$refs.form.validate((valid) => {
-                if (valid) {
-                    this.buttonLoading = true;
-                    if (this.menu.menuId) {
-                        api.system_menu_update({
-                            ...this.menu,
-                        })
-                            .then(({ code }) => {
-                                if (code == 200) {
-                                    ElMessage({
-                                        message: "修改成功",
-                                        type: "success",
-                                    });
-                                    this.reset();
-                                }
-                                this.buttonLoading = false;
-                            })
-                            .catch((err) => {
-                                console.log(err);
-                                this.buttonLoading = false;
-                            });
-                    } else {
-                        api.system_menu_create({
-                            ...this.menu,
-                        }).then(({ code }) => {
-                            if (code == 200) {
-                                ElMessage({
-                                    message: "新增成功",
-                                    type: "success",
-                                });
-                                this.reset();
-                            }
-                            this.buttonLoading = false;
+});
+const initMenuTree = () => {
+    api.system_menu_tree().then(({ data }) => {
+        menuTree.value = data;
+    });
+};
+const filterNode = (value, data) => {
+    if (!value) return true;
+    return data.menuName.indexOf(value) !== -1;
+};
+const nodeClick = (data, node, v) => {
+    menu.value.parentId = data.parentId;
+    if (menu.value.parentId === 0) {
+        menu.value.parentId = null;
+    }
+    menu.value.orderNum = data.orderNum;
+    menu.value.type = data.type;
+    menu.value.perms = data.perms;
+    menu.value.path = data.path;
+    menu.value.component = data.component;
+    menu.value.icon = data.icon;
+    menu.value.menuName = data.menuName;
+    menu.value.menuId = data.menuId;
+    unref(formRef).clearValidate();
+};
+const handleNumChange = (val) => {
+    menu.value.orderNum = val;
+};
+const chooseIcons = () => {
+    iconVisible.value = true;
+};
+const chooseIcon = (icon) => {
+    menu.value.icon = icon;
+    iconVisible.value = false;
+};
+const resetForm = () => {
+    unref(formRef).clearValidate();
+    unref(formRef).resetFields();
+    menu.value = initMenu();
+};
+const reset = () => {
+    initMenuTree();
+    menuName.value = "";
+    resetForm();
+};
+const search = () => {
+    unref(menuTreeRef).filter(menuName.value);
+};
+const add = () => {
+    resetForm();
+    ElMessage({
+        message: "请在表单中填写相关信息",
+        type: "info",
+    });
+};
+const deleteMenu = () => {
+    const checked = unref(menuTreeRef).getCheckedKeys();
+    if (checked.length === 0) {
+        ElMessage({
+            message: "请先选择节点",
+            type: "warning",
+        });
+    } else {
+        ElMessageBox.confirm("选中节点及其子结点将被永久删除, 是否继续？", "提示", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning",
+        })
+            .then(() => {
+                let deleteIds = checked.join(",");
+                api.system_menu_delete(deleteIds).then(({ code }) => {
+                    if (code == 200) {
+                        ElMessage({
+                            message: "删除成功",
+                            type: "success",
                         });
+                        reset();
                     }
-                } else {
-                    return false;
-                }
-            });
-        },
-        reset() {
-            this.initMenuTree();
-            this.menuName = "";
-            this.resetForm();
-        },
-        search() {
-            this.$refs.menuTree.filter(this.menuName);
-        },
-        add() {
-            this.resetForm();
-            ElMessage({
-                message: "请在表单中填写相关信息",
-                type: "info",
-            });
-        },
-        deleteMenu() {
-            const checked = this.$refs.menuTree.getCheckedKeys();
-            if (checked.length === 0) {
-                ElMessage({
-                    message: "请先选择节点",
-                    type: "warning",
                 });
-            } else {
-                ElMessageBox.confirm("选中节点及其子结点将被永久删除, 是否继续？", "提示", {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "warning",
+            })
+            .catch(() => {
+                unref(menuTreeRef).setCheckedKeys([]);
+            });
+    }
+};
+const submit = () => {
+    unref(formRef).validate((valid) => {
+        if (valid) {
+            buttonLoading.value = true;
+            if (unref(menu).menuId) {
+                api.system_menu_update({
+                    ...unref(menu),
                 })
-                    .then(() => {
-                        let deleteIds = checked.join(",");
-                        api.system_menu_delete(deleteIds).then(({ code }) => {
-                            if (code == 200) {
-                                ElMessage({
-                                    message: "删除成功",
-                                    type: "success",
-                                });
-                                this.reset();
-                            }
-                        });
+                    .then(({ code }) => {
+                        if (code == 200) {
+                            ElMessage({
+                                message: "修改成功",
+                                type: "success",
+                            });
+                            this.reset();
+                        }
+                        buttonLoading.value = false;
                     })
-                    .catch(() => {
-                        this.$refs.menuTree.setCheckedKeys([]);
+                    .catch((err) => {
+                        console.log(err);
+                        buttonLoading.value = false;
+                    });
+            } else {
+                api.system_menu_create({
+                    ...unref(menu),
+                })
+                    .then(({ code }) => {
+                        if (code == 200) {
+                            ElMessage({
+                                message: "新增成功",
+                                type: "success",
+                            });
+                            this.reset();
+                        }
+                        buttonLoading.value = false;
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        buttonLoading.value = false;
                     });
             }
-        },
-        resetForm() {
-            this.$refs.form.clearValidate();
-            this.$refs.form.resetFields();
-            this.menu = this.initMenu();
-        },
-    },
+        } else {
+            return false;
+        }
+    });
 };
+onMounted(() => initMenuTree());
 </script>
 
 <style lang="scss" scoped>
