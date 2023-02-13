@@ -7,15 +7,19 @@
                         <el-input v-model="searchForm.roleName" placeholder="角色名称" class="filter-item search-item" />
                         <el-button class="filter-item" type="primary" plain @click="search">搜索</el-button>
                         <el-button class="filter-item" type="warning" plain @click="reset">重置</el-button>
-                        <el-dropdown trigger="click" class="filter-item">
+                        <el-dropdown v-has-any-permission="['role:create','role:delete']" trigger="click" class="filter-item">
                             <el-button>
                                 更多操作
                                 <el-icon class="el-icon--right"><arrow-down /></el-icon>
                             </el-button>
                             <template #dropdown>
                                 <el-dropdown-menu>
-                                    <el-dropdown-item @click="add">新增</el-dropdown-item>
-                                    <el-dropdown-item @click="batchDelete">删除</el-dropdown-item>
+                                    <div v-has-permission="['role:create']">
+                                        <el-dropdown-item @click="add">新增</el-dropdown-item>
+                                    </div>
+                                    <div v-has-permission="['role:delete']">
+                                        <el-dropdown-item @click="batchDelete">删除</el-dropdown-item>
+                                    </div>
                                 </el-dropdown-menu>
                             </template>
                         </el-dropdown>
@@ -37,8 +41,9 @@
                             <el-table-column label="创建时间" prop="createTime" :show-overflow-tooltip="true" align="center" min-width="180px"> </el-table-column>
                             <el-table-column label="操作" align="center" width="150px" class-name="small-padding fixed-width" fixed="right">
                                 <template #default="{ row }">
-                                    <el-icon class="table-operation" style="color: #2db7f5" @click="edit(row)"><Setting /></el-icon>
-                                    <el-icon class="table-operation" style="color: #f50" @click="singleDelete(row)"><Delete /></el-icon>
+                                    <el-icon v-has-permission="['role:update']" class="table-operation" style="color: #2db7f5" @click="edit(row)"><Setting /></el-icon>
+                                    <el-icon v-has-permission="['role:delete']" class="table-operation" style="color: #f50" @click="singleDelete(row)"><Delete /></el-icon>
+                                    <el-link v-has-no-permission="['role:update','role:delete']" class="no-perm">无权限</el-link>
                                 </template>
                             </el-table-column>
                         </el-table>

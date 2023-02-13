@@ -7,15 +7,19 @@
                         <el-input v-model="deptName" placeholder="部门名称" class="filter-item search-item" />
                         <el-button class="filter-item" type="primary" plain @click="search">搜索</el-button>
                         <el-button class="filter-item" type="warning" plain @click="reset">重置</el-button>
-                        <el-dropdown trigger="click" class="filter-item">
+                        <el-dropdown v-has-any-permission="['dept:add','dept:delete']" trigger="click" class="filter-item">
                             <el-button>
                                 更多操作
                                 <el-icon class="el-icon--right"><arrow-down /></el-icon>
                             </el-button>
                             <template #dropdown>
                                 <el-dropdown-menu>
-                                    <el-dropdown-item @click="add">新增</el-dropdown-item>
-                                    <el-dropdown-item @click="deleteDept">删除</el-dropdown-item>
+                                    <div v-has-permission="['dept:create']">
+                                        <el-dropdown-item @click="add">新增</el-dropdown-item>
+                                    </div>
+                                    <div v-has-permission="['dept:delete']">
+                                        <el-dropdown-item @click="deleteDept">删除</el-dropdown-item>
+                                    </div>
                                 </el-dropdown-menu>
                             </template>
                         </el-dropdown>

@@ -7,15 +7,19 @@
                         <el-input v-model="menuName" placeholder="名称" class="filter-item search-item" />
                         <el-button class="filter-item" type="primary" plain @click="search">搜索</el-button>
                         <el-button class="filter-item" type="warning" plain @click="reset">重置</el-button>
-                        <el-dropdown trigger="click" class="filter-item">
+                        <el-dropdown v-has-any-permission="['menu:create','menu:delete']" trigger="click" class="filter-item">
                             <el-button>
                                 更多操作
                                 <el-icon class="el-icon--right"><arrow-down /></el-icon>
                             </el-button>
                             <template #dropdown>
                                 <el-dropdown-menu>
-                                    <el-dropdown-item @click="add">新增</el-dropdown-item>
-                                    <el-dropdown-item @click="deleteMenu">删除</el-dropdown-item>
+                                    <div v-has-permission="['menu:create']">
+                                        <el-dropdown-item @click="add">新增</el-dropdown-item>
+                                    </div>
+                                    <div v-has-permission="['menu:delete']">
+                                        <el-dropdown-item @click="deleteMenu">删除</el-dropdown-item>
+                                    </div>
                                 </el-dropdown-menu>
                             </template>
                         </el-dropdown>
