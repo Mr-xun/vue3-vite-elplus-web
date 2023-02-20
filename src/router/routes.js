@@ -2,7 +2,7 @@
  * @Author: xunxiao
  * @Date: 2022-09-26 15:00:09
  * @LastEditors: xunxiao
- * @LastEditTime: 2022-11-29 16:02:48
+ * @LastEditTime: 2023-02-20 11:04:14
  * @Description: Routes
  */
 import Layout from "@/layout/index.vue";
@@ -66,49 +66,6 @@ export const routes = [
                 component: () => import("@/views/tracker/Report.vue"),
                 meta: {
                     title: "埋点报表",
-                },
-            },
-        ],
-    },
-    {
-        name: "System",
-        redirect: "/system/menu",
-        component: Layout,
-        meta: {
-            icon: "Files",
-            title: "系统管理",
-        },
-        children: [
-            {
-                path: "/system/user",
-                name: "SystemUserIndex",
-                component: () => import("@/views/system/user/index.vue"),
-                meta: {
-                    title: "用户管理",
-                },
-            },
-            {
-                path: "/system/menu",
-                name: "SystemMenuIndex",
-                component: () => import("@/views/system/menu/index.vue"),
-                meta: {
-                    title: "菜单管理",
-                },
-            },
-            {
-                path: "/system/role",
-                name: "SystemRoleIndex",
-                component: () => import("@/views/system/role/index.vue"),
-                meta: {
-                    title: "角色管理",
-                },
-            },
-            {
-                path: "/system/dept",
-                name: "SystemDeptIndex",
-                component: () => import("@/views/system/dept/index.vue"),
-                meta: {
-                    title: "部门管理",
                 },
             },
         ],

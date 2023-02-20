@@ -24,7 +24,7 @@
                             </template>
                         </el-dropdown>
                     </div>
-                    <div class="center-container">
+                    <div class="center-container" v-loading="treeLoading">
                         <el-tree
                             ref="menuTreeRef"
                             :data="menuTree"
@@ -106,7 +106,7 @@
                 <el-card class="box-card" style="margin-top: -2rem">
                     <el-row>
                         <el-col :span="24" style="text-align: right">
-                            <el-button type="primary" plain :loading="buttonLoading" @click="submit">{{ menu.menuId === "" ? "新增" : "修改" }}</el-button>
+                            <el-button v-has-any-permission="['menu:create','menu:update']" type="primary" plain :loading="buttonLoading" @click="submit">{{ menu.menuId === "" ? "新增" : "修改" }}</el-button>
                         </el-col>
                     </el-row>
                 </el-card>
@@ -122,6 +122,7 @@ defineOptions({
     name: "MenuManage",
 });
 const iconVisible = ref(false);
+const treeLoading = ref(false);
 const buttonLoading = ref(false);
 const formRef = ref(null);
 const menuTreeRef = ref(null);
@@ -172,8 +173,10 @@ const rules = reactive({
     },
 });
 const initMenuTree = () => {
+    treeLoading.value = true;
     api.system_menu_tree().then(({ data }) => {
         menuTree.value = data;
+        treeLoading.value = false;
     });
 };
 const filterNode = (value, data) => {
@@ -269,7 +272,7 @@ const submit = () => {
                                 message: "修改成功",
                                 type: "success",
                             });
-                            this.reset();
+                            reset();
                         }
                         buttonLoading.value = false;
                     })
@@ -287,7 +290,7 @@ const submit = () => {
                                 message: "新增成功",
                                 type: "success",
                             });
-                            this.reset();
+                            reset();
                         }
                         buttonLoading.value = false;
                     })

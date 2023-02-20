@@ -193,8 +193,8 @@ const submit = () => {
                             message: "修改成功",
                             type: "success",
                         });
-                        reset();
                     }
+                    reset();
                     buttonLoading.value = false;
                 });
             } else {
@@ -207,6 +207,7 @@ const submit = () => {
                         });
                         reset();
                     }
+                    reset();
                     buttonLoading.value = false;
                 });
             }

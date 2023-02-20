@@ -2,17 +2,17 @@
  * @Author: xunxiao 17810204418@163.com
  * @Date: 2022-09-17 22:08:49
  * @LastEditors: xunxiao
- * @LastEditTime: 2023-02-13 14:53:10
+ * @LastEditTime: 2023-02-20 11:04:55
  * @Description: Router
  */
 import { createRouter, createWebHashHistory } from "vue-router";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import db from "@/utils/localstorage";
-import request from "@/utils/request";
 import api from "@/api";
 import store from "@/store/index";
 import { routes } from "./routes";
+import Layout from "@/layout/index.vue";
 const VUE_APP_ROOT_PATH = import.meta.env.VUE_APP_ROOT_PATH;
 const router = createRouter({
     history: createWebHashHistory(VUE_APP_ROOT_PATH), // createWebHashHistory
@@ -83,14 +83,15 @@ function save(name, data) {
 function get(name) {
     return JSON.parse(localStorage.getItem(name));
 }
-
+const modules = import.meta.glob("../views/**/*.vue");
 function filterAsyncRouter(routes) {
     return routes.filter((route) => {
         const component = route.component;
         if (component) {
             if (route.component === "Layout") {
+                route.component = Layout;
             } else {
-                route.component = (resolve) => require([`@/views/${component}.vue`], resolve);
+                route.component = modules[`../views/${component}.vue`];
             }
             if (route.children && route.children.length) {
                 route.children = filterAsyncRouter(route.children);

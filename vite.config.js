@@ -2,7 +2,7 @@
  * @Author: xunxiao 17810204418@163.com
  * @Date: 2022-09-17 21:10:34
  * @LastEditors: xunxiao
- * @LastEditTime: 2022-10-24 14:47:45
+ * @LastEditTime: 2023-02-20 09:55:45
  * @Description: vite.config.js
  */
 import { defineConfig, loadEnv } from "vite";
@@ -90,6 +90,8 @@ export default defineConfig(({ command, mode }) => {
                 "element-plus/es/components/tree/style/index",
                 "element-plus/es/components/tabs/style/index",
                 "element-plus/es/components/tab-pane/style/index",
+                "element-plus/es/components/link/style/index",
+                "element-plus/es/components/tag/style/index",
             ],
         },
         define: {

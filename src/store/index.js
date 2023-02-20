@@ -2,26 +2,23 @@
  * @Author: xunxiao
  * @Date: 2022-09-19 08:24:40
  * @LastEditors: xunxiao
- * @LastEditTime: 2022-09-19 16:42:30
+ * @LastEditTime: 2023-02-20 09:47:38
  * @Description: Vuex Entry
  */
 import { createStore } from "vuex";
-
 import getters from "./getters";
-import app from "./modules/app";
-import setting from "./modules/setting";
-import account from "./modules/account";
-import basic from "./modules/basic";
-import tagsView from "./modules/tagsView";
+
+const modulesFiles = import.meta.globEager("./modules/*.js");
+
+const modules = Object.keys(modulesFiles).reduce((modules, modulePath) => {
+    // set './modules/account.js' => 'account'
+    const moduleName = modulePath.replace(/^\.\/modules\/(.*)\.\w+$/, "$1");
+    modules[moduleName] = modulesFiles[modulePath]?.default;
+    return modules;
+}, {});
 
 export const store = createStore({
-    modules: {
-        app,
-        setting,
-        account,
-        basic,
-        tagsView,
-    },
+    modules,
     getters,
 });
 
