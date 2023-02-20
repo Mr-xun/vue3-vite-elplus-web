@@ -44,19 +44,19 @@
                 @selection-change="onSelectChange"
             >
                 <el-table-column type="selection" align="center" width="40px" />
-                <el-table-column label="姓名" prop="realName" :show-overflow-tooltip="true" align="center" min-width="120px"></el-table-column>
-                <el-table-column label="用户名" prop="userName" :show-overflow-tooltip="true" align="center" min-width="120px"></el-table-column>
+                <el-table-column label="姓名" prop="realName" :show-overflow-tooltip="true" align="center" min-width="100"></el-table-column>
+                <el-table-column label="用户名" prop="userName" :show-overflow-tooltip="true" align="center" min-width="100"></el-table-column>
                 <el-table-column label="性别" class-name="status-col">
                     <template #default="{ row }">
                         <el-tag :type="sexFilter(row.gender)">{{ transSex(row.gender) }}</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="部门" prop="deptName" align="center" min-width="110px"> </el-table-column>
-                <el-table-column label="邮箱" prop="email" :show-overflow-tooltip="true" align="center" min-width="200px"></el-table-column>
-                <el-table-column label="电话" prop="mobile" :show-overflow-tooltip="true" align="center" min-width="120px"></el-table-column>
+                <el-table-column label="部门" prop="deptName" align="center" min-width="110"> </el-table-column>
+                <el-table-column label="邮箱" prop="email" :show-overflow-tooltip="true" align="center" min-width="200"></el-table-column>
+                <el-table-column label="电话" prop="mobile" :show-overflow-tooltip="true" align="center" min-width="100"></el-table-column>
                 <el-table-column label="状态" prop="status" class-name="status-col"></el-table-column>
-                <el-table-column label="创建时间" prop="createTime" align="center" min-width="180px"></el-table-column>
-                <el-table-column label="操作" align="center" min-width="150px" class-name="small-padding fixed-width" fixed="right">
+                <el-table-column label="创建时间" prop="createTime" align="center" min-width="180"></el-table-column>
+                <el-table-column label="操作" align="center" min-width="150" class-name="small-padding fixed-width" fixed="right">
                     <template #default="{ row }">
                         <el-icon v-has-permission="['user:view']" class="table-operation" style="color: #87d068"  @click="view(row)"><View /></el-icon>
                         <el-icon v-has-permission="['user:update']" class="table-operation" style="color: #2db7f5" @click="edit(row)"><Setting /></el-icon>
@@ -88,7 +88,7 @@ const store = useStore();
 //table高度
 const tableHeight = inject("tableHeight");
 
-//页面table渲染操作
+//查询条件
 const searchForm = reactive({});
 
 const currentUser = computed(() => store.state.account.user);

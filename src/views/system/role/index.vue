@@ -196,6 +196,9 @@ const submit = () => {
                     }
                     reset();
                     buttonLoading.value = false;
+                }).catch((err) => {
+                    console.log(err);
+                    buttonLoading.value = false;
                 });
             } else {
                 role.value.menuIds = unref(permsTreeRef).getCheckedKeys();
@@ -209,7 +212,10 @@ const submit = () => {
                     }
                     reset();
                     buttonLoading.value = false;
-                });
+                }).catch((err) => {
+                    console.log(err);
+                    buttonLoading.value = false;
+                });;
             }
         } else {
             return false;

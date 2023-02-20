@@ -172,30 +172,40 @@ const submitForm = () => {
             let params = { ...unref(user) };
             if (!params.userId) {
                 // create
-                api.system_user_create(params).then(({ code }) => {
-                    if (code == 200) {
-                        isVisible.value = false;
-                        ElMessage({
-                            message: "新增成功",
-                            type: "success",
-                        });
-                        emits("success");
-                    }
-                    buttonLoading.value = false;
-                });
+                api.system_user_create(params)
+                    .then(({ code }) => {
+                        if (code == 200) {
+                            isVisible.value = false;
+                            ElMessage({
+                                message: "新增成功",
+                                type: "success",
+                            });
+                            emits("success");
+                        }
+                        buttonLoading.value = false;
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        buttonLoading.value = false;
+                    });
             } else {
                 // update
-                api.system_user_update(params).then(({ code }) => {
-                    if (code == 200) {
-                        isVisible.value = false;
-                        ElMessage({
-                            message: "修改成功",
-                            type: "success",
-                        });
-                        emits("success");
-                    }
-                    buttonLoading.value = false;
-                });
+                api.system_user_update(params)
+                    .then(({ code }) => {
+                        if (code == 200) {
+                            isVisible.value = false;
+                            ElMessage({
+                                message: "修改成功",
+                                type: "success",
+                            });
+                            emits("success");
+                        }
+                        buttonLoading.value = false;
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        buttonLoading.value = false;
+                    });
             }
         } else {
             return false;

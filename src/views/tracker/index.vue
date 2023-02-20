@@ -141,7 +141,7 @@ const dateTimeFilter = (time) => {
 //毫秒转秒
 const mssToSecFormat = (mss) => (mss ? mss / 1000 + "s" : "--");
 
-//页面table渲染操作
+//查询条件
 const searchForm = reactive({});
 const tableData = reactive({
     list: [],

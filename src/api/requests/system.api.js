@@ -3,7 +3,7 @@
  * @Date: 2022-09-18 17:06:54
  * @LastEditors: xunxiao
  * @LastEditTime: 2022-11-18 14:00:51
- * @Description: 系统接口
+ * @Description: 系统模块接口
  */
 
 import request from "@/utils/request";

@@ -85,15 +85,17 @@ const handleLogin = () => {
         if (valid) {
             loading.value = true;
             api.login(loginForm)
-                .then(({ data }) => {
-                    saveLoginToken(data);
-                    getUserInfo();
-                    ElMessage({
-                        message: "登录成功",
-                        type: "success",
-                    });
+                .then(({ code, data }) => {
+                    if (code == 200) {
+                        saveLoginToken(data);
+                        getUserInfo();
+                        ElMessage({
+                            message: "登录成功",
+                            type: "success",
+                        });
+                        router.push({ path: "/" });
+                    }
                     loading.value = false;
-                    router.push({ path: "/" });
                 })
                 .catch((error) => {
                     console.error(error);
