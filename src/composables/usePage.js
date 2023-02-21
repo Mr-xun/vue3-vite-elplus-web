@@ -2,7 +2,7 @@
  * @Author: xunxiao
  * @Date: 2022-12-05 15:41:06
  * @LastEditors: xunxiao
- * @LastEditTime: 2022-12-07 10:05:20
+ * @LastEditTime: 2023-02-21 09:47:24
  * @Description: usePage 接收一个 opts 参数，返回列表所需数据
  */
 /**
@@ -72,6 +72,11 @@ const usePage = (opts) => {
             ...pagination,
             ...searchForm,
         };
+        if (searchForm.timeRange) {
+            opts.startTime = searchForm.timeRange[0];
+            opts.endTime = searchForm.timeRange[1];
+        }
+        delete opts.timeRange;
         tableLoading.value = true;
         getListApi(opts)
             .then(({ code, data }) => {

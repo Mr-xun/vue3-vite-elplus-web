@@ -19,4 +19,16 @@ export default {
         //查询所有登录日志
         return request.get("/log/login/all", { params });
     },
+    log_operation_delete(deleteIds) {
+        //删除操作日志
+        return request.delete(`/log/operation/delete/${deleteIds}`);
+    },
+    log_operation_list(params) {
+        //查询操作日志（分页）
+        return request.get("/log/operation/list", { params });
+    },
+    log_operation_all(params = {}) {
+        //查询所有操作日志
+        return request.get("/log/operation/all", { params });
+    },
 };
