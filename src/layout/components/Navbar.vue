@@ -2,7 +2,7 @@
  * @Author: xunxiao
  * @Date: 2022-09-19 08:24:39
  * @LastEditors: xunxiao
- * @LastEditTime: 2022-11-30 09:05:21
+ * @LastEditTime: 2023-02-21 17:15:42
  * @Description: Navbar Component
 -->
 <template>
@@ -22,7 +22,13 @@
                 </div>
                 <template #dropdown>
                     <el-dropdown-menu class="user-dropdown">
-                        <el-dropdown-item>
+                        <router-link to="/profile/index">
+                            <el-dropdown-item>个人中心</el-dropdown-item>
+                        </router-link>
+                        <el-dropdown-item divided>
+                            <span style="display: block" @click="deleteCache">清除缓存</span>
+                        </el-dropdown-item>
+                        <el-dropdown-item divided>
                             <span style="display: block" @click="logout">退出登录</span>
                         </el-dropdown-item>
                     </el-dropdown-menu>
@@ -31,14 +37,15 @@
         </div>
     </div>
 </template>
-<script setup >
+<script setup>
 import Breadcrumb from "@/components/Breadcrumb/index.vue";
 import Hamburger from "@/components/Hamburger/index.vue";
 import db from "@/utils/localstorage";
+import { ElMessageBox } from "element-plus";
 const store = useStore();
 
 const sidebarCollapse = computed(() => !!store.state.setting.sidebar.opened);
-const userName = computed(() => store.state.account.user.user_name);
+const userName = computed(() => store.state.account.user.realName);
 const device = computed(() => store.state.setting.device);
 const avatar = computed(() => new URL(`../../assets/avatar/19034103295190235.jpg`, import.meta.url).href);
 
@@ -46,6 +53,20 @@ const toggleSideBar = () => store.commit("setting/toggleSidebar");
 const logout = () => {
     db.clear();
     location.reload();
+};
+//清除缓存
+const deleteCache = () => {
+    ElMessageBox.confirm("是否立即清除用户权限缓存？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+    }).then(() => {
+        let removeMap = ["USER_ROUTER", "PERMISSIONS,"];
+        removeMap.forEach((v) => {
+            db.remove(v);
+        });
+        location.reload();
+    });
 };
 </script>
 <style lang="scss" scoped>

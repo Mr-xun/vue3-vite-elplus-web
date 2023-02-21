@@ -55,6 +55,14 @@ export default {
         //更新用户
         return request.put("/system/user/update", params);
     },
+    system_user_password_reset(params) {
+        //重置用户密码
+        return request.put("/system/user/password/reset", params);
+    },
+    system_user_password_update(params) {
+        //修改用户密码
+        return request.put("/system/user/password/update", params);
+    },
     system_user_delete(deleteIds) {
         //删除用户
         return request.delete(`/system/user/delete/${deleteIds}`);
