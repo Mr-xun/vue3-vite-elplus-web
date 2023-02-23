@@ -8,7 +8,7 @@
 import request from "@/utils/request";
 export default {
     log_login_delete(deleteIds) {
-        //删除登录日志
+        //批量删除登录日志
         return request.delete(`/log/login/delete/${deleteIds}`);
     },
     log_login_list(params) {
@@ -16,11 +16,11 @@ export default {
         return request.get("/log/login/list", { params });
     },
     log_login_all(params = {}) {
-        //查询所有登录日志
+        //查询全部登录日志
         return request.get("/log/login/all", { params });
     },
     log_operation_delete(deleteIds) {
-        //删除操作日志
+        //批量删除操作日志
         return request.delete(`/log/operation/delete/${deleteIds}`);
     },
     log_operation_list(params) {
@@ -28,7 +28,7 @@ export default {
         return request.get("/log/operation/list", { params });
     },
     log_operation_all(params = {}) {
-        //查询所有操作日志
+        //查询全部操作日志
         return request.get("/log/operation/all", { params });
     },
 };

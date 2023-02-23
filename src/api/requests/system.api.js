@@ -64,7 +64,7 @@ export default {
         return request.put("/system/user/password/update", params);
     },
     system_user_delete(deleteIds) {
-        //删除用户
+        //批量删除用户
         return request.delete(`/system/user/delete/${deleteIds}`);
     },
     system_user_list(params) {
@@ -72,7 +72,7 @@ export default {
         return request.get("/system/user/list", { params });
     },
     system_user_all(params = {}) {
-        //查询所有用户
+        //查询全部用户
         return request.get("/system/user/all", { params });
     },
     system_menu_create(params) {
@@ -84,7 +84,7 @@ export default {
         return request.put("/system/menu/update", params);
     },
     system_menu_delete(deleteIds) {
-        //删除菜单
+        //批量删除菜单
         return request.delete(`/system/menu/delete/${deleteIds}`);
     },
     system_menu_tree() {
@@ -100,7 +100,7 @@ export default {
         return request.put("/system/role/update", params);
     },
     system_role_delete(deleteIds) {
-        //删除角色
+        //批量删除角色
         return request.delete(`/system/role/delete/${deleteIds}`);
     },
     system_role_list(params) {
@@ -108,7 +108,7 @@ export default {
         return request.get("/system/role/list", { params });
     },
     system_role_all() {
-        //查询所有角色
+        //查询全部角色
         return request.get("/system/role/all");
     },
     system_dept_create(params) {
@@ -120,7 +120,7 @@ export default {
         return request.put("/system/dept/update", params);
     },
     system_dept_delete(deleteIds) {
-        //删除部门
+        //批量删除部门
         return request.delete(`/system/dept/delete/${deleteIds}`);
     },
     system_dept_tree() {
