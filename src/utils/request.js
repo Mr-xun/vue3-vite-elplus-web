@@ -1,14 +1,14 @@
 /*
  * @Author: xunxiao 17810204418@163.com
  * @Date: 2022-09-17 21:10:34
- * @LastEditors: xunxiao 17810204418@163.com
- * @LastEditTime: 2022-09-27 21:37:51
+ * @LastEditors: xunxiao
+ * @LastEditTime: 2023-02-24 13:56:35
  * @Description: request
  */
 import { ElNotification } from "element-plus";
 import db from "@/utils/localstorage";
 import router from "@/router";
-import { getToken, getRefreshToken, getExpireTime } from '@/utils/auth';
+import { getToken, } from '@/utils/auth';
 
 const service = axios.create({
     withCredentials: true,

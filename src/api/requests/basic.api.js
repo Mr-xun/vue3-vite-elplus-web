@@ -2,7 +2,7 @@
  * @Author: xunxiao
  * @Date: 2023-02-23 17:04:20
  * @LastEditors: xunxiao
- * @LastEditTime: 2023-02-23 17:14:48
+ * @LastEditTime: 2023-02-24 11:10:34
  * @Description: 基础档案模块接口
  */
 import request from "@/utils/request";
@@ -51,7 +51,7 @@ export default {
         //查询全部枚举字典
         return request.get("/basic/enum/all", { params });
     },
-    basic_enum_allByType() {
+    basic_enum_allByType(params) {
         //查询全部枚举字典通过枚举字典
         return request.get("/basic/enum/allByType", { params });
     },

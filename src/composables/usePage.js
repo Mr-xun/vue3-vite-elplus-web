@@ -2,7 +2,7 @@
  * @Author: xunxiao
  * @Date: 2022-12-05 15:41:06
  * @LastEditors: xunxiao
- * @LastEditTime: 2023-02-21 09:47:24
+ * @LastEditTime: 2023-02-24 13:30:40
  * @Description: usePage 接收一个 opts 参数，返回列表所需数据
  */
 /**
@@ -10,7 +10,7 @@
  * @param {Object} opts.searchForm - 默认查询参数
  * @param {Function} opts.getListApi  - 获取列表数据的接口
  * @param {Function} opts.fetchDataFunc  - 执行完 fetchData 成功后执行的逻辑 有一个opts参数
- * @param {Function} opts.searchFunc  - 执行完 reset 后执行的回调
+ * @param {Function} opts.searchFunc  - 执行完 search 后执行的回调
  * @param {Function} opts.resetFunc  - 执行完 reset 后执行的回调
  * @param {Function} opts.pageChangeFunc  - 执行完 paginationChange 后执行的回调
  * @param {Function} opts.deleteApi  - 删除数据的接口
@@ -147,7 +147,7 @@ const usePage = (opts) => {
         editDialog.isVisible = true;
     };
     const edit = (row) => {
-        unref(editRef).setUser(row);
+        unref(editRef).setFormData(row);
         editDialog.title = "修改";
         editDialog.isVisible = true;
     };

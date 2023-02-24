@@ -86,7 +86,6 @@ import UserView from "./View.vue";
 import Pagination from "@/components/Pagination/index.vue";
 import usePage from "@/composables/usePage";
 import api from "@/api";
-import { unref } from "vue";
 const store = useStore();
 
 //table高度
@@ -178,7 +177,7 @@ const transSex = (gender) => {
     }
 };
 const view = (row) => {
-    unref(viewUserRef).setUser(row);
+    unref(viewUserRef).setFormData(row);
     userViewVisible.value = true;
 };
 

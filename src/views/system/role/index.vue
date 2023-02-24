@@ -33,6 +33,7 @@
                             border
                             fit
                             style="width: 100%"
+                            :header-cell-style="{ background: '#eef1f6', color: '#606266' }"
                             @selection-change="onSelectChange"
                         >
                             <el-table-column type="selection" align="center" width="40px" />

@@ -162,7 +162,7 @@ const reset = () => {
     user.value = initUser();
 };
 
-const setUser = (val) => {
+const setFormData = (val) => {
     user.value = { ...val };
 };
 const submitForm = () => {
@@ -238,5 +238,5 @@ onMounted(() => {
         })();
     };
 });
-defineExpose({ setUser });
+defineExpose({ setFormData });
 </script>

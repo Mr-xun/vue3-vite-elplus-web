@@ -126,8 +126,8 @@ const transSex = (sex) => {
             return "保密";
     }
 };
-const setUser = (val) => (user.value = { ...val });
-defineExpose({ setUser });
+const setFormData = (val) => (user.value = { ...val });
+defineExpose({ setFormData });
 </script>
 <style lang="scss" scoped>
 .user-view {

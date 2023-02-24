@@ -23,25 +23,6 @@
                     </template>
                 </el-input>
             </el-form-item>
-            <!-- <el-form-item class="code-input">
-				<el-input
-					ref="code"
-					v-model="loginForm.code"
-					prefix-icon="el-icon-lock"
-					placeholder="验证码"
-					name="code"
-					type="text"
-					autocomplete="off"
-					style="width: 70%"
-					@keyup.enter="handleLogin"
-				/>
-			</el-form-item> -->
-            <!-- <img
-				:src="imageCode"
-				alt="codeImage"
-				class="code-image"
-				@click="getCodeImage"
-			/> -->
             <el-button :loading="loading" type="primary" style="width: 100%; margin-bottom: 14px" @click.prevent="handleLogin"> 立即登录 </el-button>
         </el-form>
     </div>
@@ -49,8 +30,6 @@
 
 <script setup>
 import db from "@/utils/localstorage";
-import { randomNum } from "@/utils";
-import baseURL from "@/utils/baseURL";
 import api from "@/api";
 import { ref } from "vue";
 const router = useRouter();
@@ -58,9 +37,6 @@ const store = useStore();
 defineOptions({
     name: "Login",
 });
-const codeUrl = ref(`${baseURL}auth/captcha`);
-const randomId = ref(randomNum(24, 16));
-const imageCode = ref("");
 const loginForm = reactive({
     userName: "",
     password: "",
@@ -111,32 +87,6 @@ const getUserInfo = async () => {
 };
 const saveLoginToken = (data) => {
     store.commit("account/setAccessToken", data.token);
-};
-const getCodeImage = () => {
-    axios({
-        method: "GET",
-        url: `${unref(codeUrl)}?key=${unref(randomId)}`,
-        responseType: "arraybuffer",
-    })
-        .then((res) => {
-            return "data:image/png;base64," + btoa(new Uint8Array(res.data).reduce((data, byte) => data + String.fromCharCode(byte), ""));
-        })
-        .then((res) => {
-            imageCode.value = res;
-        })
-        .catch((e) => {
-            if (e.toString().indexOf("429") !== -1) {
-                ElMessage({
-                    message: "获取验证码过于频繁，请稍后再试",
-                    type: "error",
-                });
-            } else {
-                ElMessage({
-                    message: "获取图形验证码失败",
-                    type: "error",
-                });
-            }
-        });
 };
 onMounted(() => {
     db.clear();

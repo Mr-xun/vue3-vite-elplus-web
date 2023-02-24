@@ -1,7 +1,4 @@
-/**
- * Created by PanJiaChen on 16/11/18.
- */
-
+import pinyin from "js-pinyin";
 /**
  * Parse the time to string
  * @param {(Object|string|number)} time
@@ -12,15 +9,15 @@ export function parseTime(time, cFormat) {
     if (arguments.length === 0) {
         return null;
     }
-    const format = cFormat || '{y}-{m}-{d} {h}:{i}:{s}';
+    const format = cFormat || "{y}-{m}-{d} {h}:{i}:{s}";
     let date;
-    if (typeof time === 'object') {
+    if (typeof time === "object") {
         date = time;
     } else {
-        if (typeof time === 'string' && /^[0-9]+$/.test(time)) {
+        if (typeof time === "string" && /^[0-9]+$/.test(time)) {
             time = parseInt(time);
         }
-        if (typeof time === 'number' && time.toString().length === 10) {
+        if (typeof time === "number" && time.toString().length === 10) {
             time = time * 1000;
         }
         date = new Date(time);
@@ -32,16 +29,16 @@ export function parseTime(time, cFormat) {
         h: date.getHours(),
         i: date.getMinutes(),
         s: date.getSeconds(),
-        a: date.getDay()
+        a: date.getDay(),
     };
     const time_str = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
         let value = formatObj[key];
         // Note: getDay() returns 0 on Sunday
-        if (key === 'a') {
-            return [ '日', '一', '二', '三', '四', '五', '六' ][value];
+        if (key === "a") {
+            return ["日", "一", "二", "三", "四", "五", "六"][value];
         }
         if (result.length > 0 && value < 10) {
-            value = '0' + value;
+            value = "0" + value;
         }
         return value || 0;
     });
@@ -54,7 +51,7 @@ export function parseTime(time, cFormat) {
  * @returns {string}
  */
 export function formatTime(time, option) {
-    if (('' + time).length === 10) {
+    if (("" + time).length === 10) {
         time = parseInt(time) * 1000;
     } else {
         time = +time;
@@ -65,19 +62,19 @@ export function formatTime(time, option) {
     const diff = (now - d) / 1000;
 
     if (diff < 30) {
-        return '刚刚';
+        return "刚刚";
     } else if (diff < 3600) {
         // less 1 hour
-        return Math.ceil(diff / 60) + '分钟前';
+        return Math.ceil(diff / 60) + "分钟前";
     } else if (diff < 3600 * 24) {
-        return Math.ceil(diff / 3600) + '小时前';
+        return Math.ceil(diff / 3600) + "小时前";
     } else if (diff < 3600 * 24 * 2) {
-        return '1天前';
+        return "1天前";
     }
     if (option) {
         return parseTime(time, option);
     } else {
-        return d.getMonth() + 1 + '月' + d.getDate() + '日' + d.getHours() + '时' + d.getMinutes() + '分';
+        return d.getMonth() + 1 + "月" + d.getDate() + "日" + d.getHours() + "时" + d.getMinutes() + "分";
     }
 }
 
@@ -87,7 +84,7 @@ export function formatTime(time, option) {
  */
 export function getQueryObject(url) {
     url = url == null ? window.location.href : url;
-    const search = url.substring(url.lastIndexOf('?') + 1);
+    const search = url.substring(url.lastIndexOf("?") + 1);
     const obj = {};
     const reg = /([^?&=]+)=([^?&=]*)/g;
     search.replace(reg, (rs, $1, $2) => {
@@ -135,13 +132,13 @@ export function cleanArray(actual) {
  * @returns {Array}
  */
 export function param(json) {
-    if (!json) return '';
+    if (!json) return "";
     return cleanArray(
         Object.keys(json).map((key) => {
-            if (json[key] === undefined) return '';
-            return encodeURIComponent(key) + '=' + encodeURIComponent(json[key]);
+            if (json[key] === undefined) return "";
+            return encodeURIComponent(key) + "=" + encodeURIComponent(json[key]);
         })
-    ).join('&');
+    ).join("&");
 }
 
 /**
@@ -149,19 +146,11 @@ export function param(json) {
  * @returns {Object}
  */
 export function param2Obj(url) {
-    const search = url.split('?')[1];
+    const search = url.split("?")[1];
     if (!search) {
         return {};
     }
-    return JSON.parse(
-        '{"' +
-			decodeURIComponent(search)
-			    .replace(/"/g, '\\"')
-			    .replace(/&/g, '","')
-			    .replace(/=/g, '":"')
-			    .replace(/\+/g, ' ') +
-			'"}'
-    );
+    return JSON.parse('{"' + decodeURIComponent(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"').replace(/\+/g, " ") + '"}');
 }
 
 /**
@@ -169,7 +158,7 @@ export function param2Obj(url) {
  * @returns {string}
  */
 export function html2Text(val) {
-    const div = document.createElement('div');
+    const div = document.createElement("div");
     div.innerHTML = val;
     return div.textContent || div.innerText;
 }
@@ -181,7 +170,7 @@ export function html2Text(val) {
  * @returns {Object}
  */
 export function objectMerge(target, source) {
-    if (typeof target !== 'object') {
+    if (typeof target !== "object") {
         target = {};
     }
     if (Array.isArray(source)) {
@@ -189,7 +178,7 @@ export function objectMerge(target, source) {
     }
     Object.keys(source).forEach((property) => {
         const sourceProperty = source[property];
-        if (typeof sourceProperty === 'object') {
+        if (typeof sourceProperty === "object") {
             target[property] = objectMerge(target[property], sourceProperty);
         } else {
             target[property] = sourceProperty;
@@ -209,7 +198,7 @@ export function toggleClass(element, className) {
     let classString = element.className;
     const nameIndex = classString.indexOf(className);
     if (nameIndex === -1) {
-        classString += '' + className;
+        classString += "" + className;
     } else {
         classString = classString.substr(0, nameIndex) + classString.substr(nameIndex + className.length);
     }
@@ -221,7 +210,7 @@ export function toggleClass(element, className) {
  * @returns {Date}
  */
 export function getTime(type) {
-    if (type === 'start') {
+    if (type === "start") {
         return new Date().getTime() - 3600 * 1000 * 24 * 90;
     } else {
         return new Date(new Date().toDateString());
@@ -237,7 +226,7 @@ export function getTime(type) {
 export function debounce(func, wait, immediate) {
     let timeout, args, context, timestamp, result;
 
-    const later = function() {
+    const later = function () {
         // 据上一次触发时间间隔
         const last = +new Date() - timestamp;
 
@@ -254,7 +243,7 @@ export function debounce(func, wait, immediate) {
         }
     };
 
-    return function(...args) {
+    return function (...args) {
         context = this;
         timestamp = +new Date();
         const callNow = immediate && !timeout;
@@ -277,12 +266,12 @@ export function debounce(func, wait, immediate) {
  * @returns {Object}
  */
 export function deepClone(source) {
-    if (!source && typeof source !== 'object') {
-        throw new Error('error arguments', 'deepClone');
+    if (!source && typeof source !== "object") {
+        throw new Error("error arguments", "deepClone");
     }
     const targetObj = source.constructor === Array ? [] : {};
     Object.keys(source).forEach((keys) => {
-        if (source[keys] && typeof source[keys] === 'object') {
+        if (source[keys] && typeof source[keys] === "object") {
             targetObj[keys] = deepClone(source[keys]);
         } else {
             targetObj[keys] = source[keys];
@@ -303,8 +292,8 @@ export function uniqueArr(arr) {
  * @returns {string}
  */
 export function createUniqueString() {
-    const timestamp = +new Date() + '';
-    const randomNum = parseInt((1 + Math.random()) * 65536) + '';
+    const timestamp = +new Date() + "";
+    const randomNum = parseInt((1 + Math.random()) * 65536) + "";
     return (+(randomNum + timestamp)).toString(32);
 }
 
@@ -315,7 +304,7 @@ export function createUniqueString() {
  * @returns {boolean}
  */
 export function hasClass(ele, cls) {
-    return !!ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+    return !!ele.className.match(new RegExp("(\\s|^)" + cls + "(\\s|$)"));
 }
 
 /**
@@ -324,7 +313,7 @@ export function hasClass(ele, cls) {
  * @param {string} cls
  */
 export function addClass(ele, cls) {
-    if (!hasClass(ele, cls)) ele.className += ' ' + cls;
+    if (!hasClass(ele, cls)) ele.className += " " + cls;
 }
 
 /**
@@ -334,22 +323,22 @@ export function addClass(ele, cls) {
  */
 export function removeClass(ele, cls) {
     if (hasClass(ele, cls)) {
-        const reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
-        ele.className = ele.className.replace(reg, ' ');
+        const reg = new RegExp("(\\s|^)" + cls + "(\\s|$)");
+        ele.className = ele.className.replace(reg, " ");
     }
 }
 
 export function getFileType(filename) {
-    const startIndex = filename.lastIndexOf('.');
+    const startIndex = filename.lastIndexOf(".");
     if (startIndex !== -1) {
         return filename.substring(startIndex + 1, filename.length).toLowerCase();
     } else {
-        return '';
+        return "";
     }
 }
 
 export function randomNum(len, radix) {
-    const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+    const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".split("");
     const uuid = [];
     radix = radix || chars.length;
 
@@ -361,8 +350,8 @@ export function randomNum(len, radix) {
         let r;
 
         // rfc4122 requires these characters
-        uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
-        uuid[14] = '4';
+        uuid[8] = uuid[13] = uuid[18] = uuid[23] = "-";
+        uuid[14] = "4";
 
         // Fill in random data.  At i==19 set the high bits of clock sequence as
         // per rfc4122, sec. 4.1.5
@@ -373,6 +362,9 @@ export function randomNum(len, radix) {
             }
         }
     }
-    return uuid.join('') + new Date().getTime();
+    return uuid.join("") + new Date().getTime();
 }
 
+//汉字转拼音
+pinyin.setOptions({ checkPolyphone: false, charCase: 1 });
+export const txtToPinyin = pinyin;
