@@ -2,7 +2,7 @@
  * @Author: xunxiao 17810204418@163.com
  * @Date: 2022-09-17 21:10:34
  * @LastEditors: xunxiao
- * @LastEditTime: 2023-02-24 13:56:35
+ * @LastEditTime: 2023-02-24 15:29:30
  * @Description: request
  */
 import { ElNotification } from "element-plus";
@@ -20,9 +20,10 @@ const service = axios.create({
 });
 //请求错误异常处理
 const ErrorHandle = (error) => {
+    console.log(error,'error')
+    let message = "";
     if (error.response) {
         let { status } = error.response;
-        let message = "";
         switch (status) {
             case 400:
                 message = "请求错误(400)";
@@ -63,12 +64,15 @@ const ErrorHandle = (error) => {
                 message = `连接出错(${status})!`;
         }
         message = `${message}，请检查网络或联系管理员！`;
-        ElNotification({
-            title: "请求失败",
-            message: message,
-            type: "error",
-        });
+        
+    }else{
+        message = `服务异常，请检查网络或联系管理员！`;
     }
+    ElNotification({
+        title: "请求失败",
+        message: message,
+        type: "error",
+    });
     return Promise.reject(error);
 };
 service.interceptors.request.use((config) => {

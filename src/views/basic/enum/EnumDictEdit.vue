@@ -27,7 +27,7 @@ import api from "@/api";
 import { txtToPinyin } from "@/utils";
 const props = defineProps({
     dialogVisible: {
-        type: Boolean,
+        type: Boolean,  
         default: false,
     },
     title: {
